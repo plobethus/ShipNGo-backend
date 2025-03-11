@@ -1,11 +1,13 @@
-const mysql = require("mysql2"); //basically #include
+const mysql = require("mysql2");
 
-//this function calls the .env variables to connect to the database.
 const pool = mysql.createPool({
-  host: process.env.DB_HOST,  
-  user: process.env.DB_USER,  
-  password: process.env.DB_PASS,  
-  database: process.env.DB_NAME, 
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
+  ssl: {
+    rejectUnauthorized: true, // Required for Azure MySQL
+  },
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
