@@ -10,6 +10,8 @@ app.use(express.json());
 
 // Import authentication routes
 app.use("/auth", require("./routes/auth"));
+app.use("/tracking", require("./routes/tracking"));
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
