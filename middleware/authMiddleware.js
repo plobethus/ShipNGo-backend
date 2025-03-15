@@ -19,7 +19,7 @@ module.exports = (req, res, next) => {
       return res.status(400).json({ message: "Invalid token data." });
     }
 
-    req.user = { userId: verified.id, role: verified.role }; // Attaches user data
+    req.user = { userId: verified.userId, role: verified.role }; // Attaches user data
     next();
   } catch (err) {
     res.status(400).json({ message: "Invalid token." });

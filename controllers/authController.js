@@ -18,8 +18,12 @@ exports.login = async (req, res) => {
   }
 
   try { //queries customer and employee tables to check if email exists
-    const [customerRows] = await db.execute("SELECT id, password, 'customer' AS role FROM customers WHERE email = ?", [email]);
-    const [employeeRows] = await db.execute("SELECT id, password, 'employee' AS role FROM employees WHERE email = ?", [email]);
+    const [customerRows] = await db.execute(
+      "SELECT customer_id AS id, password, 'customer' AS role FROM customers WHERE email = ?", [email]
+    );
+    const [employeeRows] = await db.execute(
+      "SELECT employee_id AS id, password, 'employee' AS role FROM employees WHERE email = ?", [email]
+    );
     
     const rows = customerRows.length > 0 ? customerRows : employeeRows;
 
