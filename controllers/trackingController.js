@@ -4,7 +4,10 @@ exports.getTrackingInfo = async (req, res) => {
   const { package_id } = req.params;
 
   try {
-    const [rows] = await db.execute("SELECT * FROM tracking WHERE package_id = ?", [package_id]);
+    const [rows] = await db.execute(
+      "SELECT * FROM trackinghistory WHERE package_id = ? ORDER BY updated_at DESC",
+      [package_id]
+    );
 
     if (rows.length === 0) {
       return res.status(404).json({ message: "Tracking info not found" });
@@ -18,11 +21,13 @@ exports.getTrackingInfo = async (req, res) => {
 };
 
 exports.updateTracking = async (req, res) => {
-  const { package_id, status, location } = req.body;
+  const { package_id, warehouse_location, post_office_location, status, route_id } = req.body;
 
   try {
-    await db.execute("INSERT INTO tracking (package_id, status, location, updated_at) VALUES (?, ?, ?, NOW())", 
-      [package_id, status, location]);
+    await db.execute(
+      "INSERT INTO trackinghistory (package_id, warehouse_location, post_office_location, status, updated_at, route_id) VALUES (?, ?, ?, ?, NOW(), ?)", 
+      [package_id, warehouse_location, post_office_location, status, route_id]
+    );
 
     res.json({ message: "Tracking updated successfully" });
   } catch (error) {
