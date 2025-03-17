@@ -1,10 +1,13 @@
 const db = require("../config/db");
 
-// Get all packages (Only employees can access)
+// Get all packages (Only employees can access). This function correctly handles fetching package data.
 exports.getAllPackages = async (req, res) => {
     try {
         const [packages] = await db.execute("SELECT * FROM packages");
         console.log("Fetched Packages:", packages); // Debugging log
+        if (!Array.isArray(packages)) {
+            return res.status(500).json({ message: "Invalid data format received from DB." });
+        }
 
         if (!packages || packages.length === 0) {
             return res.status(404).json({ message: "No packages found." });

@@ -5,15 +5,7 @@ const authMiddleware = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-// Render the Employee Dashboard WITH package data
-router.get("/dashboard/employee", authMiddleware("employee"), async (req, res) => {
-    try {
-        const [packages] = await getAllPackages(); // Fetch packages
-        res.json({ packages }); // Send JSON response
-    } catch (error) {
-        res.status(500).json({ message: "Error fetching packages", error: error.message });
-    }
-});
+router.get("/dashboard/employee", authMiddleware("employee"), getAllPackages);
 
 // Serve employee dashboard HTML
 router.get("/employee", authMiddleware("employee"), (req, res) => {

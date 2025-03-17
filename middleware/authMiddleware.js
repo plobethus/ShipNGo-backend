@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 module.exports = (roleRequired) => {
   return (req, res, next) => {
     const authHeader = req.header("Authorization");
+    console.log("Auth Header:", authHeader);
     if (!authHeader) {
       return res.status(401).json({ message: "Access denied. No token provided." });
     }
@@ -15,6 +16,7 @@ module.exports = (roleRequired) => {
 
     try {
       const verified = jwt.verify(token, process.env.JWT_SECRET);
+      console.log("Decoded Token:", verified);
       if (!verified.userId || !verified.role) {
         return res.status(400).json({ message: "Invalid token data." });
       }
