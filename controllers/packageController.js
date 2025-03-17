@@ -47,7 +47,11 @@ exports.updatePackage = async (req, res) => {
         query += updates.join(", ") + " WHERE package_id = ?";
         values.push(id);
 
-        await db.execute(query, values);
+        const [result] = await db.execute(query, values);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "Package not found or no changes made." });
+        }
 
         res.json({ message: "Package updated successfully." });
     } catch (error) {

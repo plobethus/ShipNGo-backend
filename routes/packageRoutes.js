@@ -1,11 +1,14 @@
 const express = require("express");
 const path = require("path");
-const { getAllPackages } = require("../controllers/packageController");
+const { getAllPackages, updatePackage } = require("../controllers/packageController");
 const authMiddleware = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
 router.get("/dashboard/employee", authMiddleware("employee"), getAllPackages);
+
+// **New Route: Update a package**
+router.put("/:id", authMiddleware("employee"), updatePackage);
 
 // Serve employee dashboard HTML
 router.get("/employee", authMiddleware("employee"), (req, res) => {
