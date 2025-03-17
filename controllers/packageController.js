@@ -1,7 +1,7 @@
 const db = require("../config/db");
 
 // Get all packages (Only employees can access)
-exports.getAllPackages = async () => {
+exports.getAllPackages = async (req, res) => {
     try {
         const [packages] = await db.execute("SELECT * FROM packages");
         console.log("Fetched Packages:", packages); // Debugging log
@@ -10,7 +10,7 @@ exports.getAllPackages = async () => {
             return res.status(404).json({ message: "No packages found." });
         }
 
-        return packages;
+        res.json({ packages });
     } catch (error) {
         console.error("Error fetching packages:", error);
         res.status(500).json({ message: "Server error", error: error.message });
