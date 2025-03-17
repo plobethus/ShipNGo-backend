@@ -10,7 +10,7 @@ exports.getAllPackages = async (req, res) => {
             return res.status(404).json({ message: "No packages found." });
         }
 
-        res.json({ packages: Array.isArray(packages) ? packages : [packages] });
+        res.json({ packages });
     } catch (error) {
         console.error("Error fetching packages:", error);
         res.status(500).json({ message: "Server error", error: error.message });
