@@ -9,7 +9,7 @@ const router = express.Router();
 router.get("/dashboard/employee", authMiddleware("employee"), async (req, res) => {
     try {
         const [packages] = await getAllPackages(); // Fetch packages
-        res.json(packages); // Send JSON response
+        res.json({ packages }); // Send JSON response
     } catch (error) {
         res.status(500).json({ message: "Error fetching packages", error: error.message });
     }
