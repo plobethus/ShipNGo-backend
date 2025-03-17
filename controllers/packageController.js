@@ -4,6 +4,12 @@ const db = require("../config/db");
 exports.getAllPackages = async (req, res) => {
     try {
         const [packages] = await db.execute("SELECT * FROM packages");
+        console.log("Fetched Packages:", packages); // 🔍 Debugging output
+
+        if (!packages || packages.length === 0) {
+            return res.status(404).json({ message: "No packages found." });
+        }
+
         res.json(packages);
     } catch (error) {
         console.error("Error fetching packages:", error);
