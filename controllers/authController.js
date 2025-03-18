@@ -44,7 +44,7 @@ exports.login = async (req, res) => {
     // Generates a JWT token for the authenticated user
     const token = jwt.sign({ userId: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-    res.json({ message: "Login successful", token, role: user.role, name: user.name });
+    res.status(200).json({ message: "Login successful", token, role: user.role, name: user.name });
   } catch (error) {
     console.error("Login error:", error);
     // If an error occurs, return a server error response
@@ -54,7 +54,7 @@ exports.login = async (req, res) => {
 
 
 exports.register = async (req, res) => {
-  const { email, password, address, username, name, phone} = req.body;
+  const { email, password, address, name, phone} = req.body;
 
   // Check if email or password is provided
   if (email == null || password == null){
@@ -70,7 +70,7 @@ exports.register = async (req, res) => {
     // Hashes the password and stores user data in the database
     const hashed_password = await bcrypt.hash(password, 10)
 
-    const [result] = await db.execute("INSERT INTO customers (name, address, phone, email, username, password) VALUES (?, ?, ?, ?, ?, ?)", [name, address, phone, email, username, hashed_password]);
+    const [result] = await db.execute("INSERT INTO customers (name, address, phone, email, password) VALUES (?, ?, ?, ?, ?, ?)", [name, address, phone, email, hashed_password]);
 
     console.log(result)
 
@@ -78,7 +78,7 @@ exports.register = async (req, res) => {
     // Generates a JWT token for the newly registered user
     const token = jwt.sign({ userId: result.insertId, role: 'customer' }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-    res.json({ message: "Login successful", token });
+    res.status(200).json({ message: "Login successful", token });
   } catch (error) {
     console.error("Registration error:", error);
     // If an error occurs, return a server error response
