@@ -1,4 +1,4 @@
-/*
+
 const express = require("express");
 const { getTrackingInfo, updateTracking } = require("../controllers/trackingController");
 
@@ -11,8 +11,8 @@ router.get("/:package_id", getTrackingInfo);
 router.post("/", updateTracking);
 
 module.exports = router;
-*/
 
+/*
 const express = require("express");
 const db = require("../db"); // Import MySQL connection
 const router = express.Router();
@@ -54,3 +54,4 @@ router.get("/:packageId", (req, res) => {
 });
 
 module.exports = router;
+*/
