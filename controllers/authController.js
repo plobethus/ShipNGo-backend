@@ -78,7 +78,7 @@ exports.register = async (req, res) => {
     // Generates a JWT token for the newly registered user
     const token = jwt.sign({ userId: result.insertId, role: 'customer' }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-    res.status(200).json({ message: "Login successful", token });
+    res.status(201).json({ message: "Login successful", token });
   } catch (error) {
     console.error("Registration error:", error);
     // If an error occurs, return a server error response
