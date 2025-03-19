@@ -15,6 +15,8 @@ app.use(express.static(path.join(__dirname, "../ShipNGo-frontend")));
 // Import authentication routes
 app.use("/auth", require("./routes/auth"));
 app.use("/tracking", require("./routes/tracking"));
+app.use("/shipment", require("./routes/shipment"));
+
 const packageRoutes = require("./routes/packageRoutes");
 app.use("/packages", packageRoutes);
 app.use("/edit", require("./routes/deliverypoints"))
