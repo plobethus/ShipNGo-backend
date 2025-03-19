@@ -2,6 +2,7 @@ const db = require("../config/db");
 
 exports.getTrackingInfo = async (req, res) => {
   const { tracking_id } = req.params;
+  console.log("Querying database for tracking ID:", tracking_id);
 
   try {
     const query = `
