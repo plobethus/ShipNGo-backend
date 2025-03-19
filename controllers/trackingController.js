@@ -6,9 +6,11 @@ exports.getTrackingInfo = async (req, res) => {
   try {
     const query = `
       SELECT 
+        th.tracking_id,
         th.package_id,
         w.name AS warehouse_location,
         p.name AS post_office_location,
+        th.date,
         th.status,
         th.updated_at,
         r.route_name
@@ -34,12 +36,12 @@ exports.getTrackingInfo = async (req, res) => {
 };
 
 exports.updateTracking = async (req, res) => {
-  const { package_id, warehouse_location, post_office_location, status, route_id } = req.body;
+  const { package_id, warehouse_location, post_office_location, status, route_id, date } = req.body;
 
   try {
     await db.execute(
-      "INSERT INTO trackinghistory (package_id, warehouse_location, post_office_location, status, updated_at, route_id) VALUES (?, ?, ?, ?, NOW(), ?)", 
-      [package_id, warehouse_location, post_office_location, status, route_id]
+      "INSERT INTO trackinghistory (package_id, warehouse_location, post_office_location, date, status, updated_at, route_id) VALUES (?, ?, ?, ?, ?, NOW(), ?)", 
+      [package_id, warehouse_location, post_office_location, date, status, route_id]
     );
 
     res.json({ message: "Tracking updated successfully" });

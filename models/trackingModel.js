@@ -8,9 +8,9 @@ exports.getTrackingByPackageId = async (package_id) => {
   return rows;
 };
 
-exports.addTrackingUpdate = async (package_id, warehouse_location, post_office_location, status, route_id) => {
+exports.addTrackingUpdate = async (package_id, warehouse_location, post_office_location, date, status, route_id) => {
   await db.execute(
-    "INSERT INTO trackinghistory (package_id, warehouse_location, post_office_location, status, updated_at, route_id) VALUES (?, ?, ?, ?, NOW(), ?)", 
-    [package_id, warehouse_location, post_office_location, status, route_id]
+    "INSERT INTO trackinghistory (package_id, warehouse_location, post_office_location, date, status, updated_at, route_id) VALUES (?, ?, ?, ?, ?, NOW(), ?)", 
+    [package_id, warehouse_location, post_office_location, date, status, route_id]
   );
 };
