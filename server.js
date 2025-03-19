@@ -17,6 +17,7 @@ app.use("/auth", require("./routes/auth"));
 app.use("/tracking", require("./routes/tracking"));
 const packageRoutes = require("./routes/packageRoutes");
 app.use("/packages", packageRoutes);
+app.use("/edit", require("./routes/deliverypoints"))
 
 // Serve customer and employee dashboards
 app.get("/dashboard/customer", (req, res) => {
