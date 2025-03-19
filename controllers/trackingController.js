@@ -8,8 +8,8 @@ exports.getTrackingInfo = async (req, res) => {
       SELECT 
         th.tracking_id,
         th.package_id,
-        w.address AS warehouse_location,  // Correct column for warehouse location
-        p.address AS post_office_location,  // Correct column for post office location
+        w.address AS warehouse_location,
+        p.address AS post_office_address,
         th.date,
         th.status,
         th.updated_at,
