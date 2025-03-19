@@ -1,5 +1,3 @@
-
-
 const express = require("express");
 const { getAllPackages, updatePackage } = require("../controllers/packageController");
 const authMiddleware = require("../middleware/authMiddleware");

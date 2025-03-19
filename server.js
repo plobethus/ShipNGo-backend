@@ -11,6 +11,8 @@ app.use(express.json());
 // Import authentication routes
 app.use("/auth", require("./routes/auth"));
 app.use("/tracking", require("./routes/tracking"));
+app.use("/shipment", require("./routes/shipment"));
+
 
 
 const PORT = process.env.PORT || 3000;
