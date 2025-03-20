@@ -70,7 +70,7 @@ exports.register = async (req, res) => {
     // Hashes the password and stores user data in the database
     const hashed_password = await bcrypt.hash(password, 10)
 
-    const [result] = await db.execute("INSERT INTO customers (name, address, phone, email, password) VALUES (?, ?, ?, ?, ?, ?)", [name, address, phone, email, hashed_password]);
+    const [result] = await db.execute("INSERT INTO customers (name, address, phone, email, password) VALUES (?, ?, ?, ?, ?)", [name, address, phone, email, hashed_password]);
 
     console.log(result)
 
