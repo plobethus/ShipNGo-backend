@@ -1,34 +1,36 @@
 const jwt = require("jsonwebtoken");
 
-// Middleware to verify JWT token for protected routes
-module.exports = (roleRequired) => {
-  return (req, res, next) => {
-    const authHeader = req.header("Authorization");
-    console.log("Auth Header:", authHeader);
-    if (!authHeader) {
-      return res.status(401).json({ message: "Access denied. No token provided." });
-    }
+module.exports = (role) => {
+    return (req, res, next) => {
+        const authHeader = req.headers["authorization"];
+        if (!authHeader) {
+            return res.status(401).json({ message: "No token provided." });
+        }
 
-    const token = authHeader.split(" ")[1]; // Extract token after "Bearer "
-    if (!token) {
-      return res.status(401).json({ message: "Access denied. Invalid token format." });
-    }
+        const token = authHeader.split(" ")[1];
+        if (!token) {
+            return res.status(401).json({ message: "Token format incorrect." });
+        }
 
-    try {
-      const verified = jwt.verify(token, process.env.JWT_SECRET);
-      console.log("Decoded Token:", verified);
-      if (!verified.userId || !verified.role) {
-        return res.status(400).json({ message: "Invalid token data." });
-      }
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            console.log("Decoded Token:", decoded); // Debugging log
 
-      if (verified.role !== roleRequired) {
-        return res.status(403).json({ message: "Access denied. Unauthorized role." });
-      }
+            if (!decoded.customer_id) {
+                console.error("customer_id is missing from decoded token.");
+                return res.status(403).json({ message: "Invalid token: No customer ID." });
+            }
 
-      req.user = { userId: verified.userId, role: verified.role }; // Attaches user data
-      next();
-    } catch (err) {
-      res.status(400).json({ message: "Invalid token." });
-    }
-  };
+            req.user = decoded;
+
+            if (role && decoded.role !== role) {
+                return res.status(403).json({ message: "Unauthorized access." });
+            }
+
+            next();
+        } catch (error) {
+            console.error("Token verification error:", error);
+            return res.status(401).json({ message: "Invalid token." });
+        }
+    };
 };
