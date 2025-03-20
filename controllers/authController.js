@@ -9,83 +9,80 @@ if (!process.env.JWT_SECRET) {
 }
 
 exports.login = async (req, res) => {
-  //extracts email and password from the request
   const { email, password } = req.body;
 
-  // Check if email or password is provided
-  if (email == null || password == null){
+  if (!email || !password) {
     return res.status(401).json({ message: "Invalid email or password" });
   }
 
-  try { //queries customer and employee tables to check if email exists
+  try {
+    // Query customers and employees to check if email exists
     const [customerRows] = await db.execute(
-      "SELECT customer_id AS id, name, password, 'customer' AS role FROM customers WHERE email = ?", [email]
+      "SELECT customer_id AS id, name, password, 'customer' AS role FROM customers WHERE email = ?", 
+      [email]
     );
     const [employeeRows] = await db.execute(
-      "SELECT employee_id AS id, name, password, 'employee' AS role FROM employees WHERE email = ?", [email]
+      "SELECT employee_id AS id, name, password, 'employee' AS role FROM employees WHERE email = ?", 
+      [email]
     );
-    
+
     const rows = customerRows.length > 0 ? customerRows : employeeRows;
 
-    // If no user is found with the provided email
     if (rows.length === 0) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    const user = rows[0]; //checks if password exists 
-    // Compare the provided password with the stored hashed password
-    const passwordMatch = await bcrypt.compare(password, user.password);
+    const user = rows[0];
 
-    // If the password does not match
+    const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    // Generates a JWT token for the authenticated user
+    // Generate a JWT token with proper identifiers
     const token = jwt.sign(
-        user.role === "customer"
-            ? { customer_id: user.id, role: "customer" }
-            : { employee_id: user.id, role: "employee" },
-        process.env.JWT_SECRET,
-        { expiresIn: "1h" }
+      user.role === "customer"
+        ? { customer_id: user.id, role: "customer" }
+        : { employee_id: user.id, role: "employee" },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
     );
 
     res.status(200).json({ message: "Login successful", token, role: user.role, name: user.name });
   } catch (error) {
     console.error("Login error:", error);
-    // If an error occurs, return a server error response
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
-
 exports.register = async (req, res) => {
-  const { email, password, address, name, phone} = req.body;
+  const { email, password, address, name, phone } = req.body;
 
-  // Check if email or password is provided
-  if (email == null || password == null){
-    return res.status(401).json({ message: "Invalid email or password" });
+  if (!email || !password || !address || !name || !phone) {
+    return res.status(400).json({ message: "All fields are required." });
   }
 
   try {
-    // Validate password length
-    if (!password || typeof password !== "string" || password.length < 8 || password.length > 15) {
+    if (password.length < 8 || password.length > 15) {
       return res.status(400).json({ message: "Password must be between 8 and 15 characters." });
-    } 
+    }
 
-    // Hashes the password and stores user data in the database
-    const hashed_password = await bcrypt.hash(password, 10)
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    const [result] = await db.execute("INSERT INTO customers (name, address, phone, email, password) VALUES (?, ?, ?, ?, ?)", [name, address, phone, email, hashed_password]);
+    const [result] = await db.execute(
+      "INSERT INTO customers (name, address, phone, email, password) VALUES (?, ?, ?, ?, ?)", 
+      [name, address, phone, email, hashedPassword]
+    );
 
-    console.log(result)
+    const token = jwt.sign(
+      { customer_id: result.insertId, role: "customer" },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
 
-    //jwt login token for authMiddleware.js
-    // Generates a JWT token for the newly registered user
-    const token = jwt.sign({ customer_id: result.insertId, role: 'customer' }, process.env.JWT_SECRET, { expiresIn: "1h" });
-
-    res.status(201).json({ message: "Login successful", token });
+    res.status(201).json({ message: "Registration successful", token });
   } catch (error) {
     console.error("Registration error:", error);
-    // If an error occurs, return a server error response
     res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
