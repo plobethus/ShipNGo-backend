@@ -1,5 +1,5 @@
 # ShipNGo-backend
-This is the backend for shipngo, created with NodeJS. The 
+This is the backend for shipngo, created with NodeJS. It is hosted on Azure as a web app.
 
 ## Created by
 - [Joice](https://github.com/joiceM18)
@@ -8,8 +8,9 @@ This is the backend for shipngo, created with NodeJS. The
 - [Sam](https://github.com/SamuelAlvarez690)
 - [Yusuf](https://github.com/GlowSand)
 
-## Website
-[link](https://ship-n-go-frontend.vercel.app)
+## Links
+[website](https://ship-n-go-frontend.vercel.app)
+[front end](https://github.com/plobethus/ShipNGo-frontend/blob/main/README.md)
 
 ## Structure
 ```
