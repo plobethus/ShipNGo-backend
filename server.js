@@ -20,7 +20,7 @@ app.use("/shipment", require("./routes/shipment"));
 
 const packageRoutes = require("./routes/packageRoutes");
 app.use("/packages", packageRoutes);
-app.use("/edit", require("./routes/deliverypoints"))
+app.use("/edit", require("./routes/deliverypoints"));
 
 // Serve customer and employee dashboards
 app.get("/dashboard/customer", (req, res) => {

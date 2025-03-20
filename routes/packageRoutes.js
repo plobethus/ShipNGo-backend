@@ -7,13 +7,10 @@ const router = express.Router();
 
 router.get("/dashboard/employee", authMiddleware("employee"), getAllPackages);
 
-// **New Route: Update a package**
 router.put("/:id", authMiddleware("employee"), updatePackage);
 
-// New Route: Get packages for a customer
 router.get("/customer", authMiddleware("customer"), getCustomerPackages);
 
-// Serve employee dashboard HTML
 router.get("/employee", authMiddleware("employee"), (req, res) => {
     res.sendFile(path.join(__dirname, "../frontend/pages/dashboard/employee.html"));
 });
