@@ -16,17 +16,22 @@ module.exports = (role) => {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
             console.log("Decoded Token:", decoded); // Debugging log
 
-            if (role === "customer" && decoded.role !== "customer") {
-                console.error("Unauthorized: Not a customer.");
-                return res.status(403).json({ message: "Unauthorized: Not a customer." });
+            if (role === "customer" && !decoded.customer_id) {
+                console.error("Invalid token: No customer ID.");
+                return res.status(403).json({ message: "Invalid token: No customer ID." });
             }
-
-            if (role === "employee" && decoded.role !== "employee") {
-                console.error("Unauthorized: Not an employee.");
-                return res.status(403).json({ message: "Unauthorized: Not an employee." });
+            
+            if (role === "employee" && !decoded.employee_id) {
+                console.error("Invalid token: No employee ID.");
+                return res.status(403).json({ message: "Invalid token: No employee ID." });
             }
 
             req.user = decoded;
+
+            if (role && decoded.role !== role) {
+                return res.status(403).json({ message: "Unauthorized access." });
+            }
+
             next();
         } catch (error) {
             console.error("Token verification error:", error);
