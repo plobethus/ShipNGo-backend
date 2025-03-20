@@ -59,3 +59,18 @@ exports.updatePackage = async (req, res) => {
         res.status(500).json({ message: "Server error", error: error.message });
     }
 };
+
+// New function: Get packages for a customer
+exports.getCustomerPackages = async (req, res) => {
+    try {
+        const customerId = req.user.customer_id;
+        const [packages] = await db.execute(
+            "SELECT package_id, sender_id, receiver_id, weight, status, address_from, address_to FROM packages WHERE sender_id = ? OR receiver_id = ?",
+            [customerId, customerId]
+        );
+        res.json(packages);
+    } catch (error) {
+        console.error("Error fetching customer packages:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
