@@ -1,11 +1,10 @@
 const db = require("../config/db");
 
-// Get all packages (Employees can access and filter by status or search by customer name)
 exports.getAllPackages = async (req, res) => {
     try {
-        if (!req.user || !req.user.employee_id) {
-            console.error("Employee ID missing from request.");
-            return res.status(403).json({ message: "Unauthorized access. Employee ID required." });
+        if (!req.user || req.user.role !== "employee") {
+            console.error("Unauthorized: Employee ID required.");
+            return res.status(403).json({ message: "Unauthorized access." });
         }
 
         const { status, customerName } = req.query;
@@ -30,36 +29,13 @@ exports.getAllPackages = async (req, res) => {
 
         const [packages] = await db.execute(query, values);
 
-        if (!Array.isArray(packages) || packages.length === 0) {
+        if (!packages.length) {
             return res.status(404).json({ message: "No packages found." });
         }
 
         res.json({ packages });
     } catch (error) {
-        console.error("Error fetching packages for employees:", error);
+        console.error("Error fetching packages:", error);
         res.status(500).json({ message: "Internal server error", error: error.message });
-    }
-};
-
-// Update package status quickly
-exports.updatePackage = async (req, res) => {
-    const { id } = req.params;
-    const { status } = req.body;
-
-    if (!status) {
-        return res.status(400).json({ message: "Please provide a status to update." });
-    }
-
-    try {
-        const [result] = await db.execute("UPDATE packages SET status = ? WHERE package_id = ?", [status, id]);
-
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ message: "Package not found or no changes made." });
-        }
-
-        res.json({ message: "Package status updated successfully." });
-    } catch (error) {
-        console.error("Error updating package:", error);
-        res.status(500).json({ message: "Server error", error: error.message });
     }
 };
