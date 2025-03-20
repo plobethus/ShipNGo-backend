@@ -9,8 +9,8 @@ This is the backend for shipngo, created with NodeJS. It is hosted on Azure as a
 - [Yusuf](https://github.com/GlowSand)
 
 ## Links
-[website](https://ship-n-go-frontend.vercel.app)
-[front end](https://github.com/plobethus/ShipNGo-frontend/blob/main/README.md)
+- [website](https://ship-n-go-frontend.vercel.app)
+- [front end](https://github.com/plobethus/ShipNGo-frontend/blob/main/README.md)
 
 ## Structure
 ```
