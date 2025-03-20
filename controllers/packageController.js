@@ -63,14 +63,23 @@ exports.updatePackage = async (req, res) => {
 // New function: Get packages for a customer
 exports.getCustomerPackages = async (req, res) => {
     try {
+        if (!req.user || !req.user.customer_id) {
+            console.error("Customer ID missing from request.");
+            return res.status(400).json({ message: "Customer ID missing from request." });
+        }
+
         const customerId = req.user.customer_id;
+        console.log(`Fetching packages for customer ID: ${customerId}`);
+
         const [packages] = await db.execute(
             "SELECT package_id, sender_id, receiver_id, weight, status, address_from, address_to FROM packages WHERE sender_id = ? OR receiver_id = ?",
             [customerId, customerId]
         );
+
+        console.log(`Packages found for customer ${customerId}:`, packages);
         res.json(packages);
     } catch (error) {
         console.error("Error fetching customer packages:", error);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ message: "Internal server error", error: error.message });
     }
 };
