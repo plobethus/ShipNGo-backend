@@ -11,8 +11,5 @@ router.put("/:id", authMiddleware("employee"), updatePackage);
 
 router.get("/customer", authMiddleware("customer"), getCustomerPackages);
 
-router.get("/employee", authMiddleware("employee"), (req, res) => {
-    res.sendFile(path.join(__dirname, "../frontend/pages/dashboard/employee.html"));
-});
 
 module.exports = router;

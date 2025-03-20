@@ -3,6 +3,13 @@ const db = require("../config/db");
 // Get all packages (Only employees can access). This function correctly handles fetching package data.
 exports.getAllPackages = async (req, res) => {
     try {
+        if (!req.user || !req.user.employee_id) {
+            console.error("Employee ID missing from request.");
+            return res.status(403).json({ message: "Unauthorized access. Employee ID required." });
+        }
+
+        console.log(`Fetching all packages for employee ID: ${req.user.employee_id}`);
+
         const [packages] = await db.execute("SELECT * FROM packages");
         console.log("Fetched Packages:", packages); // Debugging log
         if (!Array.isArray(packages)) {
@@ -15,8 +22,8 @@ exports.getAllPackages = async (req, res) => {
 
         res.json({ packages });
     } catch (error) {
-        console.error("Error fetching packages:", error);
-        res.status(500).json({ message: "Server error", error: error.message });
+        console.error("Error fetching packages for employees:", error);
+        res.status(500).json({ message: "Internal server error", error: error.message });
     }
 };
 

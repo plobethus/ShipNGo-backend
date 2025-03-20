@@ -16,9 +16,14 @@ module.exports = (role) => {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
             console.log("Decoded Token:", decoded); // Debugging log
 
-            if (!decoded.customer_id) {
-                console.error("customer_id is missing from decoded token.");
+            if (role === "customer" && !decoded.customer_id) {
+                console.error("Invalid token: No customer ID.");
                 return res.status(403).json({ message: "Invalid token: No customer ID." });
+            }
+            
+            if (role === "employee" && !decoded.employee_id) {
+                console.error("Invalid token: No employee ID.");
+                return res.status(403).json({ message: "Invalid token: No employee ID." });
             }
 
             req.user = decoded;
