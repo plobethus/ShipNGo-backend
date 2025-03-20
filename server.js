@@ -12,23 +12,21 @@ app.use(express.json());
 // Serve frontend static files
 app.use(express.static(path.join(__dirname, "../ShipNGo-frontend")));
 
-// Import authentication routes
+// Import routes
 app.use("/auth", require("./routes/auth"));
 app.use("/tracking", require("./routes/tracking"));
 console.log("Tracking route initialized.");
 app.use("/shipment", require("./routes/shipment"));
-
-const packageRoutes = require("./routes/packageRoutes");
-app.use("/packages", packageRoutes);
+app.use("/packages", require("./routes/packageRoutes"));
+// Note: Renamed route file to "deliverypoints.js" for consistency.
 app.use("/edit", require("./routes/deliverypoints"));
 
-// Serve customer and employee dashboards
+// Serve customer and employee dashboards from frontend
 app.get("/dashboard/customer", (req, res) => {
-    res.sendFile(path.join(__dirname, "../ShipNGo-frontend/pages/dashboard/customer.html"));
+  res.sendFile(path.join(__dirname, "../ShipNGo-frontend/pages/dashboard/customer.html"));
 });
-
 app.get("/dashboard/employee", (req, res) => {
-    res.sendFile(path.join(__dirname, "../ShipNGo-frontend/pages/dashboard/employee.html"));
+  res.sendFile(path.join(__dirname, "../ShipNGo-frontend/pages/dashboard/employee.html"));
 });
 
 const PORT = process.env.PORT || 3000;

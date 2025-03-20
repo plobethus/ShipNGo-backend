@@ -3,7 +3,6 @@ const db = require("../config/db");
 exports.getTrackingInfo = async (req, res) => {
   const { tracking_id } = req.params;
   console.log("Querying database for tracking ID:", tracking_id);
-
   try {
     const query = `
       SELECT 
@@ -22,13 +21,10 @@ exports.getTrackingInfo = async (req, res) => {
       WHERE th.tracking_id = ?
       ORDER BY th.updated_at DESC;
     `;
-
     const [rows] = await db.execute(query, [tracking_id]);
-
     if (rows.length === 0) {
       return res.status(404).json({ message: "Tracking info not found" });
     }
-
     res.json({ tracking_id, history: rows });
   } catch (error) {
     console.error("Error fetching tracking info:", error);
@@ -38,13 +34,11 @@ exports.getTrackingInfo = async (req, res) => {
 
 exports.updateTracking = async (req, res) => {
   const { package_id, warehouse_location, post_office_location, status, route_id, date } = req.body;
-
   try {
     await db.execute(
       "INSERT INTO trackinghistory (package_id, warehouse_location, post_office_location, date, status, updated_at, route_id) VALUES (?, ?, ?, ?, ?, NOW(), ?)", 
       [package_id, warehouse_location, post_office_location, date, status, route_id]
     );
-
     res.json({ message: "Tracking updated successfully" });
   } catch (error) {
     console.error("Error updating tracking:", error);
