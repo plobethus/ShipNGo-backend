@@ -1,29 +1,59 @@
-/* 
- * /ShipNGo/backend/routes/auth.js
- * Routes for authentication endpoints (login, registration) and secure dashboard file serving.
- */
+/*
+* /ShipNGo/backend/routes/auth.js
+*/
 
-const express = require("express");
-const { login, register } = require("../controllers/authController");
-const router = express.Router();
 const path = require("path");
-const authMiddleware = require("../middleware/authMiddleware");
+const { sendJson, serveFile } = require("../helpers");
+const authController = require("../controllers/authController");
 
-// Login and registration endpoints.
-router.post("/login", login);
-router.post("/register", register);
+async function login(req, res) {
+  try {
+    const body = await require("../helpers").readJsonBody(req);
+    const { email, password } = body;
+    const result = await authController.login(email, password);
+    res.setHeader("Set-Cookie", `token=${result.token}; HttpOnly; Secure; SameSite=None; Path=/`);
+    sendJson(res, 200, { message: "Login successful", role: result.role, name: result.name });
+  } catch (err) {
+    sendJson(res, 401, { message: err.message });
+  }
+}
 
-// Serve secure dashboard pages using updated frontend paths.
-router.get("/dashboard/customer", authMiddleware("customer"), (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/pages/dashboard/customer.html"));
-});
-router.get("/dashboard/employee", authMiddleware("employee"), (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/pages/dashboard/employee.html"));
-});
+async function register(req, res) {
+  try {
+    const body = await require("../helpers").readJsonBody(req);
+    const { email, password, address, name, phone } = body;
+    const result = await authController.register(email, password, address, name, phone);
+    res.setHeader("Set-Cookie", `token=${result.token}; HttpOnly; Secure; SameSite=None; Path=/`);
+    sendJson(res, 201, { message: "Registration successful" });
+  } catch (err) {
+    sendJson(res, 400, { message: err.message });
+  }
+}
 
-// /auth/me endpoint returns the decoded user info from the token.
-router.get("/me", authMiddleware(), (req, res) => {
-  res.json({ role: req.user.role, name: req.user.name });
-});
+async function authMe(req, res) {
+  const { verifyToken, sendJson } = require("../helpers");
+  const tokenData = verifyToken(req);
+  try {
+    const result = authController.authMe(tokenData);
+    sendJson(res, 200, result);
+  } catch (err) {
+    sendJson(res, 401, { message: err.message });
+  }
+}
 
-module.exports = router;
+function serveDashboard(req, res) {
+  let fileToServe = "";
+  if (req.url === "/auth/dashboard/customer") {
+    fileToServe = path.join(__dirname, "../../frontend/pages/dashboard/customer.html");
+  } else {
+    fileToServe = path.join(__dirname, "../../frontend/pages/dashboard/employee.html");
+  }
+  serveFile(res, fileToServe);
+}
+
+module.exports = {
+  login,
+  register,
+  authMe,
+  serveDashboard
+};

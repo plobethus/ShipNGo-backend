@@ -1,19 +1,36 @@
-/* 
- * /ShipNGo/backend/routes/tracking.js
- * Routes for retrieving tracking details and posting new tracking updates.
- */
+/*
+* /backend/routes/tracking.js
+*/
 
-const express = require("express");
-const { getTrackingInfo, updateTracking } = require("../controllers/trackingController");
+const { sendJson } = require("../helpers");
+const { readJsonBody } = require("../helpers");
+const trackingController = require("../controllers/trackingController");
 
-const router = express.Router();
+async function getTracking(req, res, trackingId) {
+  try {
+    const rows = await trackingController.getTrackingInfo(trackingId);
+    if (!rows.length) {
+      sendJson(res, 404, { message: "Tracking info not found" });
+      return;
+    }
+    sendJson(res, 200, { tracking_id: trackingId, history: rows });
+  } catch (err) {
+    sendJson(res, 500, { message: err.message });
+  }
+}
 
-// Get tracking details by tracking ID.
-router.get("/:tracking_id", (req, res, next) => {
-  next();
-}, getTrackingInfo);
+async function updateTracking(req, res) {
+  try {
+    const body = await readJsonBody(req);
+    const { package_id, warehouse_location, post_office_location, status, route_id, date } = body;
+    await trackingController.updateTracking(package_id, warehouse_location, post_office_location, date, status, route_id);
+    sendJson(res, 200, { message: "Tracking updated successfully" });
+  } catch (err) {
+    sendJson(res, 500, { message: err.message });
+  }
+}
 
-// Add a new tracking update.
-router.post("/", updateTracking);
-
-module.exports = router;
+module.exports = {
+  getTracking,
+  updateTracking
+};

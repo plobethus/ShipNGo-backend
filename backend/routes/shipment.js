@@ -1,47 +1,65 @@
-/* 
- * /ShipNGo/backend/routes/shipment.js
- * Routes for shipment creation and retrieval.
- */
+/*
+* /ShipNGo/backend/routes/shipment.js
+*/
 
-const express = require("express");
-const router = express.Router();
-const db = require("../config/db"); // Use the configured database connection
+const { sendJson } = require("../helpers");
+const { readJsonBody } = require("../helpers");
+const db = require("mysql2").createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
+  database: process.env.DB_NAME,
+  ssl: { rejectUnauthorized: true },
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
+}).promise();
 
-// Create a new shipment.
-router.post("/", (req, res) => {
-    const { sender_id, recipient_id, weight, dimensions, shipping_cost, delivery_date } = req.body;
+async function createShipment(req, res) {
+  try {
+    const body = await readJsonBody(req);
+    const { sender_id, recipient_id, weight, dimensions, shipping_cost, delivery_date } = body;
     if (!sender_id || !recipient_id || !weight || !dimensions || !shipping_cost || !delivery_date) {
-        return res.status(400).json({ error: "All fields are required." });
+      sendJson(res, 400, { error: "All fields are required." });
+      return;
     }
     const sql = `
-        INSERT INTO shipments (sender_id, recipient_id, weight, dimensions, shipping_cost, delivery_date)
-        VALUES (?, ?, ?, ?, ?, ?)
+      INSERT INTO shipments (sender_id, recipient_id, weight, dimensions, shipping_cost, delivery_date)
+      VALUES (?, ?, ?, ?, ?, ?)
     `;
-    db.query(sql, [sender_id, recipient_id, weight, dimensions, shipping_cost, delivery_date], (err, result) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json({ message: "Shipment created successfully!", shipmentId: result.insertId });
-    });
-});
+    const [result] = await db.query(sql, [sender_id, recipient_id, weight, dimensions, shipping_cost, delivery_date]);
+    sendJson(res, 200, { message: "Shipment created successfully!", shipmentId: result.insertId });
+  } catch (err) {
+    sendJson(res, 500, { error: err.message });
+  }
+}
 
-// Get all shipments.
-router.get("/", (req, res) => {
+async function getShipments(req, res) {
+  try {
     const sql = "SELECT * FROM shipments";
-    db.query(sql, (err, results) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json(results);
-    });
-});
+    const [results] = await db.query(sql);
+    sendJson(res, 200, results);
+  } catch (err) {
+    sendJson(res, 500, { error: err.message });
+  }
+}
 
-// Get a single shipment by ID.
-router.get("/:id", (req, res) => {
-    const shipmentId = req.params.id;
-    // Updated to use "shipment_id" as the primary key.
+async function getShipmentById(req, res, id) {
+  try {
     const sql = "SELECT * FROM shipments WHERE shipment_id = ?";
-    db.query(sql, [shipmentId], (err, result) => {
-        if (err) return res.status(500).json({ error: err.message });
-        if (result.length === 0) return res.status(404).json({ message: "Shipment not found" });
-        res.json(result[0]);
-    });
-});
+    const [result] = await db.query(sql, [id]);
+    if (!result || result.length === 0) {
+      sendJson(res, 404, { message: "Shipment not found" });
+      return;
+    }
+    sendJson(res, 200, result[0]);
+  } catch (err) {
+    sendJson(res, 500, { error: err.message });
+  }
+}
 
-module.exports = router;
+module.exports = {
+  createShipment,
+  getShipments,
+  getShipmentById
+};

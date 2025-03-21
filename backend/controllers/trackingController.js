@@ -1,13 +1,19 @@
-/* 
- * /ShipNGo/backend/controllers/trackingController.js
- * Fetches and updates tracking information for packages.
- */
+/*
+* /ShipNGo/backend/controllers/trackingController.js
+*/
 
-const db = require("../config/db");
-
-exports.getTrackingInfo = async (req, res) => {
-  const { tracking_id } = req.params;
-  try {
+const db = require("mysql2").createPool({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME,
+    ssl: { rejectUnauthorized: true },
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
+  }).promise();
+  
+  async function getTrackingInfo(trackingId) {
     const query = `
       SELECT 
         th.tracking_id,
@@ -25,27 +31,18 @@ exports.getTrackingInfo = async (req, res) => {
       WHERE th.tracking_id = ?
       ORDER BY th.updated_at DESC;
     `;
-    const [rows] = await db.execute(query, [tracking_id]);
-    if (rows.length === 0) {
-      return res.status(404).json({ message: "Tracking info not found" });
-    }
-    res.json({ tracking_id, history: rows });
-  } catch (error) {
-    console.error("Error fetching tracking info:", error);
-    res.status(500).json({ message: "Server error", error: error.message });
+    const [rows] = await db.execute(query, [trackingId]);
+    return rows;
   }
-};
-
-exports.updateTracking = async (req, res) => {
-  const { package_id, warehouse_location, post_office_location, status, route_id, date } = req.body;
-  try {
+  
+  async function updateTracking(package_id, warehouse_location, post_office_location, date, status, route_id) {
     await db.execute(
-      "INSERT INTO trackinghistory (package_id, warehouse_location, post_office_location, date, status, updated_at, route_id) VALUES (?, ?, ?, ?, ?, NOW(), ?)", 
+      "INSERT INTO trackinghistory (package_id, warehouse_location, post_office_location, date, status, updated_at, route_id) VALUES (?, ?, ?, ?, ?, NOW(), ?)",
       [package_id, warehouse_location, post_office_location, date, status, route_id]
     );
-    res.json({ message: "Tracking updated successfully" });
-  } catch (error) {
-    console.error("Error updating tracking:", error);
-    res.status(500).json({ message: "Server error", error: error.message });
   }
-};
+  
+  module.exports = {
+    getTrackingInfo,
+    updateTracking
+  };

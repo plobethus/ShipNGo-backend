@@ -1,19 +1,19 @@
-/* 
- * /ShipNGo/backend/controllers/packageController.js
- * Handles package retrieval and updates for both employee and customer views.
- */
+/*
+* /ShipNGo/backend/controllers/packageController.js
+*/
 
-const db = require("../config/db");
-
-exports.getAllPackages = async (req, res) => {
-  try {
-    // Verify that the request includes an employee token.
-    if (!req.user || !req.user.employee_id) {
-      console.error("Employee ID missing from request.");
-      return res.status(403).json({ message: "Unauthorized access. Employee ID required." });
-    }
-
-    const { status, customerName, startDate, endDate, minWeight, maxWeight, address } = req.query;
+const db = require("mysql2").createPool({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME,
+    ssl: { rejectUnauthorized: true },
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
+  }).promise();
+  
+  async function getAllPackages(filter) {
     let query = `
       SELECT p.package_id, p.status, p.location, p.weight, p.dimensions, p.address_from, p.address_to,
              c1.name AS sender_name, c2.name AS receiver_name
@@ -23,86 +23,62 @@ exports.getAllPackages = async (req, res) => {
       WHERE 1=1
     `;
     const values = [];
-    if (status) {
+    if (filter.status) {
       query += " AND p.status = ?";
-      values.push(status);
+      values.push(filter.status);
     }
-    if (customerName) {
+    if (filter.customerName) {
       query += " AND (c1.name LIKE ? OR c2.name LIKE ?)";
-      values.push(`%${customerName}%`, `%${customerName}%`);
+      values.push(`%${filter.customerName}%`, `%${filter.customerName}%`);
     }
-    if (startDate && endDate) {
+    if (filter.startDate && filter.endDate) {
       query += " AND p.created_at BETWEEN ? AND ?";
-      values.push(startDate, endDate);
+      values.push(filter.startDate, filter.endDate);
     }
-    if (minWeight) {
+    if (filter.minWeight) {
       query += " AND p.weight >= ?";
-      values.push(minWeight);
+      values.push(filter.minWeight);
     }
-    if (maxWeight) {
+    if (filter.maxWeight) {
       query += " AND p.weight <= ?";
-      values.push(maxWeight);
+      values.push(filter.maxWeight);
     }
-    if (address) {
+    if (filter.address) {
       query += " AND (p.address_from LIKE ? OR p.address_to LIKE ?)";
-      values.push(`%${address}%`, `%${address}%`);
+      values.push(`%${filter.address}%`, `%${filter.address}%`);
     }
     const [packages] = await db.execute(query, values);
-    if (!packages.length) {
-      return res.status(404).json({ message: "No packages found." });
-    }
-    res.json({ packages });
-  } catch (error) {
-    console.error("Error fetching packages for employees:", error);
-    res.status(500).json({ message: "Internal server error", error: error.message });
+    return packages;
   }
-};
-
-exports.updatePackage = async (req, res) => {
-  const { id } = req.params;
-  const { status, location } = req.body;
-  if (!status && !location) {
-    return res.status(400).json({ message: "Please provide status or location to update." });
-  }
-  try {
+  
+  async function updatePackage(id, data) {
     let query = "UPDATE packages SET ";
     const updates = [];
     const values = [];
-    if (status) {
+    if (data.status) {
       updates.push("status = ?");
-      values.push(status);
+      values.push(data.status);
     }
-    if (location) {
+    if (data.location) {
       updates.push("location = ?");
-      values.push(location);
+      values.push(data.location);
     }
     query += updates.join(", ") + " WHERE package_id = ?";
     values.push(id);
     const [result] = await db.execute(query, values);
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "Package not found or no changes made." });
-    }
-    res.json({ message: "Package updated successfully." });
-  } catch (error) {
-    console.error("Error updating package:", error);
-    res.status(500).json({ message: "Server error", error: error.message });
+    return result.affectedRows;
   }
-};
-
-exports.getCustomerPackages = async (req, res) => {
-  try {
-    if (!req.user || !req.user.customer_id) {
-      console.error("Customer ID missing from request.");
-      return res.status(400).json({ message: "Customer ID missing from request." });
-    }
-    const customerId = req.user.customer_id;
+  
+  async function getCustomerPackages(customerId) {
     const [packages] = await db.execute(
       "SELECT package_id, sender_id, receiver_id, weight, status, address_from, address_to FROM packages WHERE sender_id = ? OR receiver_id = ?",
       [customerId, customerId]
     );
-    res.json(packages);
-  } catch (error) {
-    console.error("Error fetching customer packages:", error);
-    res.status(500).json({ message: "Internal server error", error: error.message });
+    return packages;
   }
-};
+  
+  module.exports = {
+    getAllPackages,
+    updatePackage,
+    getCustomerPackages
+  };

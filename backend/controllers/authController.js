@@ -1,24 +1,22 @@
-/* 
- * /ShipNGo/backend/controllers/authController.js
- * Handles authentication (login & registration) and sets JWT tokens as HTTP-only cookies.
- */
+/*
+* /ShipNGo/backend/controllers/authController.js
+*/
 
-const db = require("../config/db");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-
-// Ensure JWT_SECRET is set
-if (!process.env.JWT_SECRET) {
-  console.error("FATAL ERROR: JWT_SECRET is not set.");
-  process.exit(1);
-}
-
-exports.login = async (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password)
-    return res.status(401).json({ message: "Invalid email or password" });
-  try {
-    // Check both customers and employees tables
+const db = require("mysql2").createPool({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME,
+    ssl: { rejectUnauthorized: true },
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
+  }).promise();
+  const bcrypt = require("bcryptjs");
+  const jwt = require("jsonwebtoken");
+  
+  async function login(email, password) {
+    // Check both customers and employees using raw SQL
     const [customerRows] = await db.execute(
       "SELECT customer_id AS id, name, password, 'customer' AS role FROM customers WHERE email = ?",
       [email]
@@ -28,13 +26,14 @@ exports.login = async (req, res) => {
       [email]
     );
     const rows = customerRows.length ? customerRows : employeeRows;
-    if (rows.length === 0)
-      return res.status(401).json({ message: "Invalid email or password" });
+    if (rows.length === 0) {
+      throw new Error("Invalid email or password");
+    }
     const user = rows[0];
-    const passwordMatch = await bcrypt.compare(password, user.password);
-    if (!passwordMatch)
-      return res.status(401).json({ message: "Invalid email or password" });
-    // Generate JWT token based on the user role
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      throw new Error("Invalid email or password");
+    }
     const token = jwt.sign(
       user.role === "customer"
         ? { customer_id: user.id, role: "customer", name: user.name }
@@ -42,49 +41,36 @@ exports.login = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
-    // Set token in an HTTP-only, secure cookie
-    res.cookie("token", token, { 
-      httpOnly: true, 
-      secure: true,
-      sameSite: "None",
-      path: "/"
-    });
-    res.status(200).json({ message: "Login successful", role: user.role, name: user.name });
-  } catch (error) {
-    console.error("Login error:", error);
-    res.status(500).json({ message: "Server error", error: error.message });
+    return { token, role: user.role, name: user.name };
   }
-};
-
-exports.register = async (req, res) => {
-  const { email, password, address, name, phone } = req.body;
-  if (!email || !password || !address || !name || !phone) {
-    return res.status(400).json({ message: "All fields are required." });
-  }
-  try {
+  
+  async function register(email, password, address, name, phone) {
     if (password.length < 8 || password.length > 15) {
-      return res.status(400).json({ message: "Password must be between 8 and 15 characters." });
+      throw new Error("Password must be between 8 and 15 characters");
     }
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashed = await bcrypt.hash(password, 10);
     const [result] = await db.execute(
       "INSERT INTO customers (name, address, phone, email, password) VALUES (?, ?, ?, ?, ?)",
-      [name, address, phone, email, hashedPassword]
+      [name, address, phone, email, hashed]
     );
     const token = jwt.sign(
       { customer_id: result.insertId, role: "customer", name },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
-    // Set cookie after successful registration
-    res.cookie("token", token, { 
-      httpOnly: true,
-      secure: true,
-      sameSite: "None",
-      path: "/"
-    });
-    res.status(201).json({ message: "Registration successful" });
-  } catch (error) {
-    console.error("Registration error:", error);
-    res.status(500).json({ message: "Server error", error: error.message });
+    return { token, role: "customer", name };
   }
-};
+  
+  function authMe(tokenData) {
+    // tokenData is the verified JWT payload
+    if (!tokenData) {
+      throw new Error("Invalid or missing token");
+    }
+    return { role: tokenData.role, name: tokenData.name };
+  }
+  
+  module.exports = {
+    login,
+    register,
+    authMe
+  };

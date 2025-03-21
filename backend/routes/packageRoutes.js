@@ -1,19 +1,56 @@
-/* 
- * /ShipNGo/backend/routes/packageRoutes.js
- * Routes for package-related endpoints for employee dashboards and customer package views.
- */
+/*
+* /backend/routes/packageRoutes.js
+*/
 
-const express = require("express");
-const { getAllPackages, updatePackage, getCustomerPackages } = require("../controllers/packageController");
-const authMiddleware = require("../middleware/authMiddleware");
+const { sendJson } = require("../helpers");
+const packageController = require("../controllers/packageController");
+const { readJsonBody } = require("../helpers");
 
-const router = express.Router();
+async function getPackagesEmployee(req, res, query) {
+  try {
+    const packages = await packageController.getAllPackages(query);
+    if (!packages.length) {
+      sendJson(res, 404, { message: "No packages found." });
+      return;
+    }
+    sendJson(res, 200, { packages });
+  } catch (err) {
+    sendJson(res, 500, { message: err.message });
+  }
+}
 
-// Employee dashboard: Get packages with filtering.
-router.get("/dashboard/employee", authMiddleware("employee"), getAllPackages);
-// Update package (status and/or location).
-router.put("/:id", authMiddleware("employee"), updatePackage);
-// Customer view: Get packages for a customer.
-router.get("/customer", authMiddleware("customer"), getCustomerPackages);
+async function updatePackage(req, res, id) {
+  try {
+    const body = await readJsonBody(req);
+    const affected = await packageController.updatePackage(id, body);
+    if (affected === 0) {
+      sendJson(res, 404, { message: "Package not found or no changes made." });
+      return;
+    }
+    sendJson(res, 200, { message: "Package updated successfully." });
+  } catch (err) {
+    sendJson(res, 500, { message: err.message });
+  }
+}
 
-module.exports = router;
+async function getPackagesCustomer(req, res) {
+  // Assume token verification was done in middleware if needed; here we pass a customerId manually
+  // For demonstration, we extract token data in the main server before calling this function.
+  const customerId = req.tokenData && req.tokenData.customer_id;
+  if (!customerId) {
+    sendJson(res, 400, { message: "Customer ID missing." });
+    return;
+  }
+  try {
+    const packages = await packageController.getCustomerPackages(customerId);
+    sendJson(res, 200, packages);
+  } catch (err) {
+    sendJson(res, 500, { message: err.message });
+  }
+}
+
+module.exports = {
+  getPackagesEmployee,
+  updatePackage,
+  getPackagesCustomer
+};
