@@ -44,7 +44,8 @@ exports.login = async (req, res) => {
     res.cookie("token", token, { 
       httpOnly: true, 
       secure: process.env.NODE_ENV === 'production', 
-      sameSite: "None" 
+      sameSite: "None" ,
+      path: "/",
     });
     res.status(200).json({ message: "Login successful", role: user.role, name: user.name });
   } catch (error) {
