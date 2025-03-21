@@ -18,8 +18,8 @@ app.use(cookieParser());
 // Serve frontend static files
 app.use(express.static(path.join(__dirname, "../ShipNGo-frontend")));
 
-// Import routes
-app.use("/auth", require("./routes/auth"));                  // Authentication routes (login, register, dashboards)
+// ROUTES- IF YOU ADD A ROUTE DO IT UNDER HERE. DO NTO DO CONSTS FOR REQUIRE, JUST PUT THEM HERE
+app.use("/auth", require("./routes/auth"));                    // Authentication routes (login, register, dashboards)
 app.use("/tracking", require("./routes/tracking"));            // Tracking routes
 app.use("/shipment", require("./routes/shipment"));            // Shipment routes
 app.use("/packages", require("./routes/packageRoutes"));       // Package routes
@@ -27,6 +27,6 @@ app.use("/edit", require("./routes/deliverpoints"));           // Delivery point
 app.use("/claims", require("./routes/claimRoutes"));           // Claims routes
 app.use("/notifications", require("./routes/notifications"));  // Notifications routes
 
-// Start server for local testing
-const PORT = process.env.PORT || 3000;
+//DO NOT CHANGE THIS
+const PORT = process.env.PORT || 8080; 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
