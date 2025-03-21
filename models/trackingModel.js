@@ -1,4 +1,5 @@
 //ShipNGo-backend/models/trackingModel.js
+// This model provides functions to interact with tracking history data.
 
 const db = require("../config/db");
 

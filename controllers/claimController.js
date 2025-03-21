@@ -1,5 +1,5 @@
 //ShipNGo-backend/controllers/claimController.js
-
+// This controller handles claim filing and retrieval of claim data.
 
 const db = require("../config/db");
 

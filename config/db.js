@@ -1,5 +1,6 @@
 //ShipNGo-backend/config/db.js
 
+// This file configures the MySQL database connection using a connection pool.
 const mysql = require("mysql2");
 
 const pool = mysql.createPool({

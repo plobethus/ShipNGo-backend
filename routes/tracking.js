@@ -1,4 +1,6 @@
 //ShipNGo-backend/routes/tracking.js
+// This route file handles tracking endpoints for retrieving tracking details
+// and posting new tracking updates.
 
 const express = require("express");
 const { getTrackingInfo, updateTracking } = require("../controllers/trackingController");

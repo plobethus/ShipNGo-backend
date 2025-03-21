@@ -1,4 +1,5 @@
 //ShipNGo-backend/controllers/deliverPointsController.js
+// This controller handles registration of delivery points and associating addresses with them.
 
 const db = require("../config/db");
 

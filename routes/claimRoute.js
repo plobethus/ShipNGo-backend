@@ -1,16 +1,11 @@
 // /ShipNGo-backend/routes/claimRoutes.js
-
-
+// This route file handles endpoints related to claims, including filing a new claim
+// and retrieving all claims.
 const express = require("express");
 const router = express.Router();
-
-// Import the controller that handles claim logic
 const claimController = require("../controllers/claimController");
 
-// POST /claims - File a new claim
 router.post("/", claimController.fileClaim);
-
-// GET /claims - Retrieve all claims
 router.get("/", claimController.getAllClaims);
 
 module.exports = router;

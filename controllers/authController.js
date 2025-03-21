@@ -1,5 +1,6 @@
 //ShipNGo-backend/controllers/authController.js
-
+// This controller handles authentication logic (login and registration)
+// and now sets JWT tokens as HTTP-only cookies.
 const db = require("../config/db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -12,7 +13,8 @@ if (!process.env.JWT_SECRET) {
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
-  if (!email || !password) return res.status(401).json({ message: "Invalid email or password" });
+  if (!email || !password) 
+    return res.status(401).json({ message: "Invalid email or password" });
   try {
     // Check both customers and employees
     const [customerRows] = await db.execute(
@@ -24,10 +26,12 @@ exports.login = async (req, res) => {
       [email]
     );
     const rows = customerRows.length ? customerRows : employeeRows;
-    if (rows.length === 0) return res.status(401).json({ message: "Invalid email or password" });
+    if (rows.length === 0) 
+      return res.status(401).json({ message: "Invalid email or password" });
     const user = rows[0];
     const passwordMatch = await bcrypt.compare(password, user.password);
-    if (!passwordMatch) return res.status(401).json({ message: "Invalid email or password" });
+    if (!passwordMatch) 
+      return res.status(401).json({ message: "Invalid email or password" });
     // Generate token with proper identifier
     const token = jwt.sign(
       user.role === "customer"
@@ -36,7 +40,13 @@ exports.login = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
-    res.status(200).json({ message: "Login successful", token, role: user.role, name: user.name });
+    // Set the token in an HttpOnly cookie
+    res.cookie("token", token, { 
+      httpOnly: true, 
+      secure: process.env.NODE_ENV === 'production', 
+      sameSite: 'strict' 
+    });
+    res.status(200).json({ message: "Login successful", role: user.role, name: user.name });
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ message: "Server error", error: error.message });
@@ -62,7 +72,13 @@ exports.register = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
-    res.status(201).json({ message: "Registration successful", token });
+    // Set cookie after registration
+    res.cookie("token", token, { 
+      httpOnly: true, 
+      secure: process.env.NODE_ENV === 'production', 
+      sameSite: 'strict' 
+    });
+    res.status(201).json({ message: "Registration successful" });
   } catch (error) {
     console.error("Registration error:", error);
     res.status(500).json({ message: "Server error", error: error.message });

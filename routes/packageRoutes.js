@@ -1,5 +1,5 @@
 //ShipNGo-backend/routes/
-
+// This route file handles package-related endpoints for employee dashboards and customer package views.
 const express = require("express");
 const { getAllPackages, updatePackage, getCustomerPackages } = require("../controllers/packageController");
 const authMiddleware = require("../middleware/authMiddleware");
@@ -14,7 +14,6 @@ router.put("/:id", authMiddleware("employee"), updatePackage);
 router.get("/customer", authMiddleware("customer"), getCustomerPackages);
 
 module.exports = router;
-
 
 
 

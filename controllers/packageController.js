@@ -1,4 +1,5 @@
 //ShipNGo-backend/controllers/packageController.js
+// This controller handles package retrieval and updates for both employee and customer views.
 
 const db = require("../config/db");
 
