@@ -18,5 +18,9 @@ router.get("/dashboard/customer", authMiddleware("customer"), (req, res) => {
 router.get("/dashboard/employee", authMiddleware("employee"), (req, res) => {
   res.sendFile(path.join(__dirname, "../ShipNGo-frontend/pages/dashboard/employee.html"));
 });
+router.get("/me", authMiddleware(), (req, res) => {
+  // This endpoint returns the decoded user info from the token.
+  res.json({ role: req.user.role, name: req.user.name });
+});
 
 module.exports = router;
