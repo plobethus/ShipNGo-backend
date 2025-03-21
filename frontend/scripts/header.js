@@ -1,6 +1,7 @@
-// /ShipNGo-frontend/scripts/header.js
-// This loads the header HTML and applies login display logic,
-// including updating the Dashboard link based on the user's role.
+/* 
+ * /ShipNGo/frontend/scripts/header.js
+ * Dynamically loads the header HTML and adjusts the Dashboard link based on the logged-in user.
+ */
 
 document.addEventListener("DOMContentLoaded", () => {
   fetch("/includes/header.html")
@@ -8,7 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(html => {
       document.getElementById("header-include").innerHTML = html;
 
-      // After header loads, update user info and the Dashboard link.
       const role = sessionStorage.getItem("role");
       const name = sessionStorage.getItem("name");
       const userStatus = document.getElementById("user-status");
@@ -19,8 +19,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (role && name) {
         userStatus.textContent = `Logged in as ${name} (${role})`;
         logoutBtn.style.display = "inline-block";
-
-        // Set Dashboard link based on role.
         if (role === "customer") {
           dashboardLink.href = "dashboard/customer.html";
           dashboardLink.innerText = "Customer Dashboard";

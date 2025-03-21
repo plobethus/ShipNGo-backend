@@ -1,35 +1,34 @@
-// /ShipNGo-frontend/scripts/claims.js
+/* 
+ * /ShipNGo/frontend/scripts/claims.js
+ * Handles submission of a new claim and dynamically loads support tickets.
+ */
 
-// This function will POST a new claim to the backend
 document.getElementById("support-form").addEventListener("submit", async function (event) {
   event.preventDefault();
 
   const name = document.getElementById("name").value.trim();
   const email = document.getElementById("email").value.trim();
   const phone = document.getElementById("phone").value.trim();
-  const issue = document.getElementById("issue").value.trim(); // We'll store this as 'reason' in the DB
+  const issue = document.getElementById("issue").value.trim(); // Stored as 'reason' in the DB
 
-  // Basic validation
   if (!name || !email || !phone || !issue) {
     alert("Please fill in all fields.");
     return;
   }
 
   try {
-    const response = await fetch("https://shipngo-g9cpbhdvfhgca3cb.northcentralus-01.azurewebsites.net/claims", {
+    const response = await fetch("/claims", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, email, phone, reason: issue })
     });
-
     const data = await response.json();
 
     if (response.ok) {
       alert("Claim submitted successfully!");
       document.getElementById("support-form").reset();
-      loadSupportTickets(); // Reload the claims list
+      loadSupportTickets();
     } else {
-      // If the backend sent an error, e.g., 404 => "No email found"
       alert(data.message || "Failed to submit claim. Please try again.");
     }
   } catch (error) {
@@ -38,13 +37,12 @@ document.getElementById("support-form").addEventListener("submit", async functio
   }
 });
 
-// This function will GET all claims from the backend and display them
 async function loadSupportTickets() {
   const ticketList = document.getElementById("ticket-list");
   ticketList.innerHTML = "<li>Loading tickets...</li>";
 
   try {
-    const response = await fetch("https://shipngo-g9cpbhdvfhgca3cb.northcentralus-01.azurewebsites.net/claims");
+    const response = await fetch("/claims");
     const data = await response.json();
 
     if (!response.ok) {
@@ -52,9 +50,7 @@ async function loadSupportTickets() {
       return;
     }
 
-    // Clear the existing list
     ticketList.innerHTML = "";
-
     if (!data.claims || data.claims.length === 0) {
       ticketList.innerHTML = "<li class='empty'>No support tickets yet.</li>";
       return;
@@ -78,5 +74,4 @@ async function loadSupportTickets() {
   }
 }
 
-// Automatically load tickets on page load
 document.addEventListener("DOMContentLoaded", loadSupportTickets);

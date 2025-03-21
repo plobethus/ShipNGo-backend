@@ -1,44 +1,44 @@
-// /ShipNGo-frontend/scripts/customer.js
+/* 
+ * /ShipNGo/frontend/scripts/customer.js
+ * Retrieves and displays packages for an authenticated customer.
+ */
+
 document.addEventListener("DOMContentLoaded", async function () {
   try {
-    // Verify authentication by calling /auth/me.
-    const authResponse = await fetch("https://shipngo-g9cpbhdvfhgca3cb.northcentralus-01.azurewebsites.net/auth/me", {
+    const authResponse = await fetch("/auth/me", {
       method: "GET",
       credentials: "include",
       headers: { "Content-Type": "application/json" }
     });
     if (!authResponse.ok) {
-      window.location.href = "../../login.html";
+      window.location.href = "/pages/login.html";
       return;
     }
     const authData = await authResponse.json();
     if (authData.role !== "customer") {
-      window.location.href = "../../login.html";
+      window.location.href = "/pages/login.html";
       return;
     }
-    // Optionally update a welcome message if element exists.
     const welcomeDiv = document.getElementById("welcome-message");
     if (welcomeDiv) {
       welcomeDiv.innerText = `Welcome, ${authData.name} (Customer)`;
     }
-    // Load customer packages.
     await loadPackages();
   } catch (error) {
     console.error("Error verifying authentication:", error);
-    window.location.href = "../../login.html";
+    window.location.href = "/pages/login.html";
   }
 });
 
 async function loadPackages() {
   try {
-    const response = await fetch("https://shipngo-g9cpbhdvfhgca3cb.northcentralus-01.azurewebsites.net/packages/customer", {
+    const response = await fetch("/packages/customer", {
       method: "GET",
       credentials: "include",
       headers: { "Content-Type": "application/json" }
     });
     const data = await response.json();
     const packageContainer = document.getElementById("customer-packages");
-    // Replace content with a table structure for customer packages.
     packageContainer.innerHTML = `
       <h2>Your Packages</h2>
       <table>
@@ -51,9 +51,7 @@ async function loadPackages() {
             <th>Status</th>
           </tr>
         </thead>
-        <tbody id="package-table">
-          <!-- Customer package rows will be inserted here -->
-        </tbody>
+        <tbody id="package-table"></tbody>
       </table>
     `;
     const packageTable = document.getElementById("package-table");

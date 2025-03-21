@@ -1,5 +1,7 @@
-// /ShipNGo-backend/server.js
-// Main entry point: serves backend APIs and static frontend files
+/* 
+ * /ShipNGo/backend/server.js
+ * Main entry point for the backend APIs and static file serving.
+ */
 
 const express = require("express");
 const path = require("path");
@@ -9,7 +11,7 @@ require("dotenv").config();
 
 const app = express();
 
-// CORS: allow same-origin (frontend is now hosted together with backend)
+// Configure CORS to allow credentials and proper headers.
 app.use(cors({
   origin: true,
   credentials: true,
@@ -17,29 +19,28 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
-// Middleware
+// Middleware to parse JSON, URL-encoded data, and cookies.
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// --- Serve static frontend from /frontend directory ---
+// --- Serve static frontend files from the "frontend" directory ---
 const frontendPath = path.join(__dirname, "../frontend");
 app.use(express.static(frontendPath));
 
 // --- API Routes ---
-app.use("/auth", require("./routes/auth"));                    
-app.use("/packages", require("./routes/packageRoutes"));         
-app.use("/tracking", require("./routes/tracking"));            
-app.use("/shipment", require("./routes/shipment"));            
-app.use("/edit", require("./routes/deliverypoints"));          
-app.use("/claims", require("./routes/claimRoute"));            
+app.use("/auth", require("./routes/auth"));
+app.use("/packages", require("./routes/packageRoutes"));
+app.use("/tracking", require("./routes/tracking"));
+app.use("/shipment", require("./routes/shipment"));
+app.use("/edit", require("./routes/deliverpoints"));
+app.use("/claims", require("./routes/claimRoute"));
 
-
-// Catch-all: send frontend index.html for any unknown route (e.g. refreshing dashboard)
+// Catch-all: send frontend index.html for any unknown route (useful for SPA routing).
 app.get("*", (req, res) => {
   res.sendFile(path.join(frontendPath, "index.html"));
 });
 
-// Start server
+// Start the server.
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

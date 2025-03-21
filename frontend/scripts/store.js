@@ -1,4 +1,7 @@
-// /ShipNGo-frontend/scripts/store.js
+/* 
+ * /ShipNGo/frontend/scripts/store.js
+ * Implements a simple shopping cart for the ShipNGo store page.
+ */
 
 let cart = {};
 

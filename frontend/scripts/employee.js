@@ -1,27 +1,28 @@
-// /ShipNGo-frontend/scripts/employee.js
+/* 
+ * /ShipNGo/frontend/scripts/employee.js
+ * Retrieves and displays packages for an authenticated employee, including filtering and quick update functionality.
+ */
+
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    // Verify authentication using /auth/me.
-    const authResponse = await fetch("https://shipngo-g9cpbhdvfhgca3cb.northcentralus-01.azurewebsites.net/auth/me", {
+    const authResponse = await fetch("/auth/me", {
       method: "GET",
-      credentials: "include",  // Ensures the cookie is sent
+      credentials: "include",
       headers: { "Content-Type": "application/json" }
     });
     if (!authResponse.ok) {
-      window.location.href = "../login.html";
+      window.location.href = "/pages/login.html";
       return;
     }
     const authData = await authResponse.json();
     if (authData.role !== "employee") {
-      window.location.href = "../login.html";
+      window.location.href = "/pages/login.html";
       return;
     }
-    // Optionally update a welcome message.
     const welcomeDiv = document.getElementById("welcome-message");
     if (welcomeDiv) {
       welcomeDiv.innerText = `Welcome, ${authData.name} (Employee)`;
     }
-    // Set up event listeners for filter inputs.
     document.getElementById("status-filter")?.addEventListener("change", loadPackages);
     document.getElementById("search-customer")?.addEventListener("input", debounce(loadPackages, 500));
     document.getElementById("start-date")?.addEventListener("change", loadPackages);
@@ -30,15 +31,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("max-weight")?.addEventListener("input", debounce(loadPackages, 500));
     document.getElementById("address-filter")?.addEventListener("input", debounce(loadPackages, 500));
 
-    // Load packages after authentication is confirmed.
     await loadPackages();
   } catch (error) {
     console.error("Error during authentication:", error);
-    window.location.href = "../login.html";
+    window.location.href = "/pages/login.html";
   }
 });
 
-// Debounce function.
 function debounce(func, delay) {
   let timeout;
   return function () {
@@ -48,7 +47,6 @@ function debounce(func, delay) {
 }
 
 async function loadPackages() {
-  console.log("Fetching packages...");
   const params = new URLSearchParams({
     status: document.getElementById("status-filter")?.value || "",
     customerName: document.getElementById("search-customer")?.value || "",
@@ -58,11 +56,11 @@ async function loadPackages() {
     maxWeight: document.getElementById("max-weight")?.value || "",
     address: document.getElementById("address-filter")?.value || ""
   });
-  const url = `https://shipngo-g9cpbhdvfhgca3cb.northcentralus-01.azurewebsites.net/packages/dashboard/employee?${params}`;
+  const url = `/packages/dashboard/employee?${params}`;
   try {
     const response = await fetch(url, {
       method: "GET",
-      credentials: "include",  // Ensure cookies are sent with the request
+      credentials: "include",
       headers: { "Content-Type": "application/json" }
     });
     if (!response.ok) {
@@ -106,7 +104,7 @@ async function loadPackages() {
 
 async function quickUpdate(packageId, newStatus) {
   try {
-    const response = await fetch(`https://shipngo-g9cpbhdvfhgca3cb.northcentralus-01.azurewebsites.net/packages/${packageId}`, {
+    const response = await fetch(`/packages/${packageId}`, {
       method: "PUT",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
@@ -114,12 +112,11 @@ async function quickUpdate(packageId, newStatus) {
     });
     const data = await response.json();
     if (!response.ok) {
-      console.error("Error updating package:", data.message);
       alert(`Error updating package: ${data.message}`);
       return;
     }
     alert("Package updated successfully!");
-    await loadPackages();  // Refresh data after update.
+    await loadPackages();
   } catch (error) {
     console.error("Error updating package:", error);
     alert("Error updating package. Please try again.");

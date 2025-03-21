@@ -1,11 +1,12 @@
-//ShipNGo-backend/controllers/trackingController.js
-// This controller handles fetching and updating tracking information for packages.
+/* 
+ * /ShipNGo/backend/controllers/trackingController.js
+ * Fetches and updates tracking information for packages.
+ */
 
 const db = require("../config/db");
 
 exports.getTrackingInfo = async (req, res) => {
   const { tracking_id } = req.params;
-  console.log("Querying database for tracking ID:", tracking_id);
   try {
     const query = `
       SELECT 

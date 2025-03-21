@@ -1,6 +1,7 @@
-// /ShipNGo-backend/controllers/authController.js
-// This controller handles authentication logic (login and registration)
-// and sets JWT tokens as HTTP-only cookies.
+/* 
+ * /ShipNGo/backend/controllers/authController.js
+ * Handles authentication (login & registration) and sets JWT tokens as HTTP-only cookies.
+ */
 
 const db = require("../config/db");
 const bcrypt = require("bcryptjs");
@@ -17,7 +18,7 @@ exports.login = async (req, res) => {
   if (!email || !password)
     return res.status(401).json({ message: "Invalid email or password" });
   try {
-    // Check both customers and employees
+    // Check in both customers and employees tables
     const [customerRows] = await db.execute(
       "SELECT customer_id AS id, name, password, 'customer' AS role FROM customers WHERE email = ?",
       [email]
@@ -33,7 +34,7 @@ exports.login = async (req, res) => {
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch)
       return res.status(401).json({ message: "Invalid email or password" });
-    // Generate token with proper identifier
+    // Generate JWT token with proper payload based on role
     const token = jwt.sign(
       user.role === "customer"
         ? { customer_id: user.id, role: "customer", name: user.name }
@@ -41,11 +42,11 @@ exports.login = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
-    // Set the token in an HTTP-only cookie
+    // Set token in an HTTP-only, secure cookie (for production HTTPS and cross-origin scenarios)
     res.cookie("token", token, { 
       httpOnly: true, 
-      secure: true,                    // Ensure HTTPS in production
-      sameSite: "None",                // Required for cross-origin cookies
+      secure: true,
+      sameSite: "None",
       path: "/"
     });
     res.status(200).json({ message: "Login successful", role: user.role, name: user.name });
@@ -74,7 +75,7 @@ exports.register = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
-    // Set cookie after registration
+    // Set cookie after successful registration
     res.cookie("token", token, { 
       httpOnly: true,
       secure: true,

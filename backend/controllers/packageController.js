@@ -1,11 +1,13 @@
-//ShipNGo-backend/controllers/packageController.js
-// This controller handles package retrieval and updates for both employee and customer views.
+/* 
+ * /ShipNGo/backend/controllers/packageController.js
+ * Handles package retrieval and updates for both employee and customer views.
+ */
 
 const db = require("../config/db");
 
 exports.getAllPackages = async (req, res) => {
   try {
-    // Check for employee token (expects employee_id)
+    // Verify that the request includes an employee token.
     if (!req.user || !req.user.employee_id) {
       console.error("Employee ID missing from request.");
       return res.status(403).json({ message: "Unauthorized access. Employee ID required." });
@@ -34,11 +36,11 @@ exports.getAllPackages = async (req, res) => {
       values.push(startDate, endDate);
     }
     if (minWeight) {
-      query += " AND p.weight_kg >= ?";
+      query += " AND p.weight >= ?";
       values.push(minWeight);
     }
     if (maxWeight) {
-      query += " AND p.weight_kg <= ?";
+      query += " AND p.weight <= ?";
       values.push(maxWeight);
     }
     if (address) {
@@ -94,12 +96,10 @@ exports.getCustomerPackages = async (req, res) => {
       return res.status(400).json({ message: "Customer ID missing from request." });
     }
     const customerId = req.user.customer_id;
-    console.log(`Fetching packages for customer ID: ${customerId}`);
     const [packages] = await db.execute(
       "SELECT package_id, sender_id, receiver_id, weight, status, address_from, address_to FROM packages WHERE sender_id = ? OR receiver_id = ?",
       [customerId, customerId]
     );
-    console.log(`Packages found for customer ${customerId}:`, packages);
     res.json(packages);
   } catch (error) {
     console.error("Error fetching customer packages:", error);

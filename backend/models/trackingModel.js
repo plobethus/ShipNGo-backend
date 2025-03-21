@@ -1,5 +1,7 @@
-//ShipNGo-backend/models/trackingModel.js
-// This model provides functions to interact with tracking history data.
+/* 
+ * /ShipNGo/backend/models/trackingModel.js
+ * Provides functions to interact with tracking history data.
+ */
 
 const db = require("../config/db");
 

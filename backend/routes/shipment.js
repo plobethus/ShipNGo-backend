@@ -1,12 +1,14 @@
-//ShipNGo-backend/routes/shipment.js
-// This route file handles shipment creation and retrieval endpoints.
+/* 
+ * /ShipNGo/backend/routes/shipment.js
+ * Routes for shipment creation and retrieval.
+ */
+
 const express = require("express");
 const router = express.Router();
-const db = require("../config/db"); // Fixed: use config/db instead of database/db
+const db = require("../config/db"); // Use the configured database connection
 
 // Create a new shipment
 router.post("/", (req, res) => {
-    console.log("Received shipment creation request:", req.body);
     const { sender_id, recipient_id, weight, dimensions, shipping_cost, delivery_date } = req.body;
     if (!sender_id || !recipient_id || !weight || !dimensions || !shipping_cost || !delivery_date) {
         return res.status(400).json({ error: "All fields are required." });
@@ -33,8 +35,8 @@ router.get("/", (req, res) => {
 // Get a single shipment by ID
 router.get("/:id", (req, res) => {
     const shipmentId = req.params.id;
-    // NOTE: Verify if your primary key is named "ID" or "shipment_id" in your shipments table.
-    const sql = "SELECT * FROM shipments WHERE ID = ?";
+    // Updated to use "shipment_id" as the primary key
+    const sql = "SELECT * FROM shipments WHERE shipment_id = ?";
     db.query(sql, [shipmentId], (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
         if (result.length === 0) return res.status(404).json({ message: "Shipment not found" });

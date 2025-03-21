@@ -1,41 +1,37 @@
-<!-- ShipNGo/pages/dashboard/customer.html-->
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Dashboard - ShipNGo</title>
-    <link rel="stylesheet" href="../../styles/styles.css">
-    <script src="../../scripts/dashboard.js"></script>
-</head>
-<body>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Customer Dashboard - ShipNGo</title>
-  <link rel="stylesheet" href="../../styles/customer.css">
-</head>
-<body>
-  <div id="header-include"></div>
-  <script src="../../scripts/header.js" defer></script>
-
-  <div class="worker_input" id="customer-packages">
-    <h2>Your Packages</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Package ID</th>
-          <th>From</th>
-          <th>To</th>
-          <th>Weight</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody id="package-table">
-        <!-- Packages will be inserted here -->
-      </tbody>
-    </table>
-</div>
-  <script src="../../scripts/customer.js"></script>
-</body>
-</html>
+<!-- 
+ * /ShipNGo/frontend/pages/dashboard/customer.html
+ * Customer dashboard page for ShipNGo.
+ -->
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Customer Dashboard - ShipNGo</title>
+   <link rel="stylesheet" href="../../styles/customer.css">
+   <script src="../../scripts/dashboard.js" defer></script>
+ </head>
+ <body>
+   <div id="header-include"></div>
+   <script src="../../scripts/header.js" defer></script>
+ 
+   <div class="worker_input" id="customer-packages">
+     <h2>Your Packages</h2>
+     <table>
+       <thead>
+         <tr>
+           <th>Package ID</th>
+           <th>From</th>
+           <th>To</th>
+           <th>Weight</th>
+           <th>Status</th>
+         </tr>
+       </thead>
+       <tbody id="package-table">
+         <!-- Packages will be inserted here -->
+       </tbody>
+     </table>
+   </div>
+   <script src="../../scripts/customer.js"></script>
+ </body>
+ </html>

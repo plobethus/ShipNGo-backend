@@ -1,44 +1,46 @@
-<!-- ShipNGo/pages/claims.html-->
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Claims - ShipNGo</title>
-  <link rel="stylesheet" href="../styles/claims.css">
-</head>
-<body> 
-  <div id="header-include"></div>
-  <script src="/scripts/header.js" defer></script>
-  
-  <div class="container">
-    <h1>Support Center</h1>
-    <div class="card">
-      <form id="support-form">
-        <input type="text" id="name" placeholder="Name" required>
-        <input type="email" id="email" placeholder="Email" required>
-        <input type="text" id="phone" placeholder="Phone Number" required>
-        <textarea id="issue" placeholder="Describe your issue..." required></textarea>
-        <button class="submit">Submit</button>
-      </form>
-    </div>
-    <div class="card">
-      <h2>Past Support Tickets</h2>
-      <ul id="ticket-list">
-        <li class="empty">No support tickets yet.</li>
-      </ul>
-    </div>
-  </div>
-
-  <section id="services" class="services">
-    <h3>Our Services</h3>
-    <p>We provide local and international shipping, express delivery, and secure parcel handling.</p>
-  </section>
-  
-  <footer>
-    <p>&copy; 2025 ShipNGo Courier. All rights reserved.</p>
-  </footer>
-  <script src="../scripts/claims.js"></script>
-</body>
-</html>
+<!-- 
+ * /ShipNGo/frontend/pages/claims.html
+ * Claims (Support Center) page for submitting and viewing support tickets.
+ -->
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Claims - ShipNGo</title>
+   <link rel="stylesheet" href="../styles/claims.css">
+ </head>
+ <body> 
+   <div id="header-include"></div>
+   <script src="/scripts/header.js" defer></script>
+   
+   <div class="container">
+     <h1>Support Center</h1>
+     <div class="card">
+       <form id="support-form">
+         <input type="text" id="name" placeholder="Name" required>
+         <input type="email" id="email" placeholder="Email" required>
+         <input type="text" id="phone" placeholder="Phone Number" required>
+         <textarea id="issue" placeholder="Describe your issue..." required></textarea>
+         <button class="submit">Submit</button>
+       </form>
+     </div>
+     <div class="card">
+       <h2>Past Support Tickets</h2>
+       <ul id="ticket-list">
+         <li class="empty">No support tickets yet.</li>
+       </ul>
+     </div>
+   </div>
+ 
+   <section id="services" class="services">
+     <h3>Our Services</h3>
+     <p>We provide local and international shipping, express delivery, and secure parcel handling.</p>
+   </section>
+   
+   <footer>
+     <p>&copy; 2025 ShipNGo Courier. All rights reserved.</p>
+   </footer>
+   <script src="../scripts/claims.js"></script>
+ </body>
+ </html>

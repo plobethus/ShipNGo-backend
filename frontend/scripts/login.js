@@ -1,4 +1,8 @@
-// /ShipNGo-frontend/scripts/login.js
+/* 
+ * /Login/frontend/scripts/login.js
+ * Handles user login and redirects based on role.
+ */
+
 document.getElementById("login-form").addEventListener("submit", async (event) => {
   event.preventDefault();
 
@@ -14,18 +18,16 @@ document.getElementById("login-form").addEventListener("submit", async (event) =
   }
 
   try {
-    const response = await fetch("https://shipngo-g9cpbhdvfhgca3cb.northcentralus-01.azurewebsites.net/auth/login", {
+    const response = await fetch("/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
-      credentials: "include"  // Ensures the cookie is set from cross-origin response
+      credentials: "include"
     });
     const data = await response.json();
     if (response.ok) {
-      // Store role and name for UI display.
       sessionStorage.setItem("role", data.role);
       sessionStorage.setItem("name", data.name);
-      // Redirect based on role.
       if (data.role === "customer") {
         window.location.href = "dashboard/customer.html";
       } else if (data.role === "employee") {

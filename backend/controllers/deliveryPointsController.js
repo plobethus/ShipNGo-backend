@@ -1,5 +1,7 @@
-//ShipNGo-backend/controllers/deliverPointsController.js
-// This controller handles registration of delivery points and associating addresses with them.
+/* 
+ * /ShipNGo/backend/controllers/deliveryPointsController.js
+ * Handles registration of delivery points and association of addresses.
+ */
 
 const db = require("../config/db");
 
@@ -7,11 +9,17 @@ exports.register_delivery_point = async (req, res) => {
   const { name, special_instructions, delivery_type, entrance_address } = req.body;
   let entrance_address_id;
   try {
-    const [addressRows] = await db.execute("SELECT * FROM addresses WHERE LOWER(address) = LOWER(?)", [entrance_address]);
+    const [addressRows] = await db.execute(
+      "SELECT * FROM addresses WHERE LOWER(address) = LOWER(?)",
+      [entrance_address]
+    );
     if (addressRows.length > 0 && addressRows[0].customer_id == null) {
       entrance_address_id = addressRows[0].address_id;
     } else {
-      const [insert_result] = await db.execute("INSERT INTO addresses (address) VALUES (LOWER(?))", [entrance_address]);
+      const [insert_result] = await db.execute(
+        "INSERT INTO addresses (address) VALUES (LOWER(?))",
+        [entrance_address]
+      );
       entrance_address_id = insert_result.insertId;
     }
     const [result] = await db.execute(
@@ -32,7 +40,6 @@ exports.put_address_to_delivery_point = async (req, res) => {
       "REPLACE INTO registeredaddresswithpoints (delivery_point_address, delivery_point_id) VALUES (?,?)",
       [address, delivery_point_id]
     );
-    console.log(replace_result);
     res.status(200).json({ message: "Address Delivery Point Registration Successful", id: replace_result.insertId });
   } catch (error) {
     console.error("Delivery address point registration error:", error);

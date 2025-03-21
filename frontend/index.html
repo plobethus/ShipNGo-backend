@@ -1,69 +1,72 @@
-<!-- ShipNGo/index.html-->
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to ShipNGo</title>
-    <link rel="stylesheet" href="styles/styles.css">
-</head>
-<body>
-    <header>
-        <nav>
-            <a href = "./index.html">
-                <h1 class = navbar>ShipNGo</h1>
-            </a>
-            <ul>
-                <li>
-                    <a href="#shipping">Shipping</a>
-                    <ul class="dropdown">
-                        <li><a href="./pages/create-shipment.html">Create a Shipment</a></li>
-                        <li><a href="./pages/pickups.html">Schedule & Manage Pickups</a></li>
-                        <li><a href="./pages/returns.html">Manage a Return</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#support">Store</a>
-                    <ul class="dropdown">
-                        <li><a href="./pages/store.html">Packing & Shipping Supplies</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#support">Support</a>
-                    <ul class="dropdown">
-                        <li><a href="./pages/faq.html">FAQ</a></li>
-                        <li><a href="./pages/claims.html">File a Claim</a></li>
-                        <li><a href="#billing-invoicing">Billing & Invoicing</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <div class="login">
-                <a href="pages/login.html" class="btn">Log In</a>
-            </div>
-        </nav>
-    </header>
-    
-    <section id="tracking" class="tracking">
-        <div class="tracking-content">
-            <h2>Track Your Shipment</h2>
-            <p>Enter your tracking ID below to get real-time updates on your package.</p>
-            <form id="tracking-form">
-                <input type="text" id="tracking_id" placeholder="Enter Tracking ID" required>
-                <button type="submit" class="btn">Track</button>
-            </form>
-            <p class="result" id="tracking-result"></p>
-        </div>
-    </section>
-    
-    <section id="services" class="services">
-        <h3>Our Services</h3>
-        <p>We provide local and international shipping, express delivery, and secure parcel handling.</p>
-    </section>
-    
-    <footer>
-        <p>&copy; 2025 ShipNGo Courier. All rights reserved.</p>
-    </footer>
-
-
-  <script src="scripts/index.js"></script>
-</body>
-</html>
+<!-- 
+ * /ShipNGo/frontend/index.html
+ * Landing (home) page for ShipNGo.
+ -->
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Welcome to ShipNGo</title>
+   <link rel="stylesheet" href="styles/styles.css">
+ </head>
+ <body>
+   <header>
+     <nav>
+       <a href="./index.html">
+         <h1 class="navbar">ShipNGo</h1>
+       </a>
+       <ul>
+         <li>
+           <a href="#shipping">Shipping</a>
+           <ul class="dropdown">
+             <li><a href="./pages/create-shipment.html">Create a Shipment</a></li>
+             <li><a href="./pages/pickups.html">Schedule & Manage Pickups</a></li>
+             <li><a href="./pages/returns.html">Manage a Return</a></li>
+           </ul>
+         </li>
+         <li>
+           <a href="#support">Store</a>
+           <ul class="dropdown">
+             <li><a href="./pages/store.html">Packing & Shipping Supplies</a></li>
+           </ul>
+         </li>
+         <li>
+           <a href="#support">Support</a>
+           <ul class="dropdown">
+             <li><a href="./pages/faq.html">FAQ</a></li>
+             <li><a href="./pages/claims.html">File a Claim</a></li>
+             <li><a href="#billing-invoicing">Billing & Invoicing</a></li>
+           </ul>
+         </li>
+       </ul>
+       <div class="login">
+         <a href="pages/login.html" class="btn">Log In</a>
+       </div>
+     </nav>
+   </header>
+   
+   <section id="tracking" class="tracking">
+     <div class="tracking-content">
+       <h2>Track Your Shipment</h2>
+       <p>Enter your tracking ID below to get real-time updates on your package.</p>
+       <form id="tracking-form">
+         <input type="text" id="tracking_id" placeholder="Enter Tracking ID" required>
+         <button type="submit" class="btn">Track</button>
+       </form>
+       <p class="result" id="tracking-result"></p>
+     </div>
+   </section>
+   
+   <section id="services" class="services">
+     <h3>Our Services</h3>
+     <p>We provide local and international shipping, express delivery, and secure parcel handling.</p>
+   </section>
+   
+   <footer>
+     <p>&copy; 2025 ShipNGo Courier. All rights reserved.</p>
+   </footer>
+ 
+   <script src="scripts/index.js"></script>
+ </body>
+ </html>
