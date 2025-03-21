@@ -14,32 +14,24 @@ This is the backend and frontend for shipngo, created with html,css, javascript 
 
 ## Structure
 ```
-ShipNGo-backend/
-│── 📂 .github/
-│   │── 📂 workflows/
-│   │   │── main_shipngo.yml
-│── 📂 config/
-│   │── db.js
-│── 📂 controllers/
-│   │── authController.js
-│   │── deliveryPointsController.js
-│   │── packageController.js
-│   │── trackingController.js
-│── 📂 middleware/
-│   │── authMiddleware.js
-│── 📂 models/
-│   │── trackingModel.js
-│   │── userModel.js
-│── 📂 routes/
-│   │── auth.js
-│   │── deliverypoints.js
-│   │── packageRoutes.js
-│   │── shipment.js
-│   │── tracking.js
-│── .gitignore
-│── attributes.txt
-│── package-lock.json
-│── package.json
-│── README.md
-│── server.js
+ShipNGo/
+│
+├── ShipNGo-backend/             
+│   ├── server.js                
+│   ├── routes/
+│   ├── controllers/
+│   ├── middleware/
+│   ├── config/
+│   └── .env                    
+│
+├── frontend/                    
+│   ├── index.html
+│   ├── pages/
+│   ├── scripts/
+│   ├── styles/
+│   └── includes/
+│
+├── .gitignore
+├── README.md
+└── package.json                
 ```
