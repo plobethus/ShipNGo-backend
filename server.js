@@ -23,7 +23,7 @@ app.use("/auth", require("./routes/auth"));                    // Authentication
 app.use("/tracking", require("./routes/tracking"));            // Tracking routes
 app.use("/shipment", require("./routes/shipment"));            // Shipment routes
 app.use("/packages", require("./routes/packageRoutes"));       // Package routes
-app.use("/edit", require("./routes/deliverpoints"));           // Delivery points routes (auth required)
+app.use("/edit", require("./routes/deliverypoints"));           // Delivery points routes (auth required)
 app.use("/claims", require("./routes/claimRoutes"));           // Claims routes
 app.use("/notifications", require("./routes/notifications"));  // Notifications routes
 
