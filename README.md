@@ -16,7 +16,7 @@ This is the backend and frontend for shipngo, created with html,css, javascript 
 ```
 ShipNGo/
 │
-├── ShipNGo-backend/             
+├── backend/             
 │   ├── server.js                
 │   ├── routes/
 │   ├── controllers/
