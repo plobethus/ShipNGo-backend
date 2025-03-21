@@ -15,6 +15,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(cookieParser());
 
+// CORS Configuration
+app.use(cors({
+    origin: "https://ship-n-go-frontend.vercel.app", 
+    credentials: true, // Allow cookies and authentication headers
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
+
+
 // Serve frontend static files
 app.use(express.static(path.join(__dirname, "../ShipNGo-frontend")));
 
