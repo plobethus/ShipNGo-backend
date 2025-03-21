@@ -6,6 +6,8 @@ const db = require("../database/db");
 
 // Create a new shipment
 router.post("/", (req, res) => {
+    console.log("Received shipment creation request:", req.body); // Debugging log
+
     const { sender_id, recipient_id, weight, dimensions, shipping_cost, delivery_date } = req.body;
 
     if (!sender_id || !recipient_id || !weight || !dimensions || !shipping_cost || !delivery_date) {
