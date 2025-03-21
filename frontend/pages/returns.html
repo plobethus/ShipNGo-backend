@@ -1,0 +1,67 @@
+<!-- ShipNGo/pages/returns.html-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Returns - ShipNGo</title>
+  <link rel="stylesheet" href="../styles/styles.css">
+</head>
+<body> 
+  <div id="header-include"></div>
+  <script src="/scripts/header.js" defer></script>
+
+    <div class = "shipment-container">
+            <h1>Return Form</h1>
+            <div>
+                <form class = "shipment-form">
+                    <input type="text" id="first" name="sender-first" placeholder="First name" required>
+
+                    <input type="text" id="last" name="sender-last" placeholder="Last name" required>
+
+                    <input type="text" id="package-id" name="package-id" placeholder="Package ID" required>
+
+                    <input type="text" id="receiver-address" name="receiver-address" placeholder="Receiver Address"required>
+
+                    <input type="number" id="package-weight" name="package-weight" placeholder="Package Weight (lbs)"required>
+
+                    <button type="submit" class="btn">Submit Return</button>
+                </form>
+            </div>
+
+            <p id="return-result"></p>
+
+    </div>
+    <p id="return-result"></p>
+  </div>
+
+  <section id="services" class="services">
+    <h3>Our Services</h3>
+    <p>We provide local and international shipping, express delivery, and secure parcel handling.</p>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 ShipNGo Courier. All rights reserved.</p>
+  </footer>
+
+  <script>
+    document.getElementById("return-form").addEventListener("submit", function(event) {
+      event.preventDefault();
+      const firstName = document.getElementById("first").value;
+      const lastName = document.getElementById("last").value;
+      const packageId = document.getElementById("package-id").value;
+      const receiverAddress = document.getElementById("receiver-address").value;
+      const packageWeight = document.getElementById("package-weight").value;
+      if (firstName && lastName && packageId && receiverAddress && packageWeight) {
+        document.getElementById("return-result").textContent = 
+          `Return Created! Sender: ${firstName} ${lastName}, Package ID: ${packageId}, Receiver Address: ${receiverAddress}, Weight: ${packageWeight} lbs`;
+        document.getElementById("return-result").style.color = "green";
+      } else {
+        document.getElementById("return-result").textContent = "Please fill in all fields.";
+        document.getElementById("return-result").style.color = "red";
+      }
+    });
+  </script>
+</body>
+</html>

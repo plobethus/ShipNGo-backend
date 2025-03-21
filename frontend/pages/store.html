@@ -1,0 +1,63 @@
+<!-- ShipNGo/pages/store.html-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Store - ShipNGo</title>
+  <link rel="stylesheet" href="../styles/store.css">
+</head>
+<body>
+  <div id="header-include"></div>
+  <script src="/scripts/header.js" defer></script>
+
+  <div class="store_page">
+    <div class="items">
+      <div class="store_item" data-name="Envelope" data-price="0.99">
+        <div>Envelope ($0.99 each) 📨</div>
+        <div class="price">
+          <button class="cart" data-amount="1">Add</button>
+          <button class="cart" data-amount="-1">Remove</button>
+          <select>
+            <option>1</option>
+            <option>10</option>
+            <option>100</option>
+          </select>
+        </div>
+      </div>
+      <div class="store_item" data-name="Box" data-price="1.99">
+        <div>Boxes ($1.99 each) 📦</div>
+        <div class="price">
+          <button class="cart" data-amount="1">Add</button>
+          <button class="cart" data-amount="-1">Remove</button>
+          <select>
+            <option>1</option>
+            <option>10</option>
+            <option>100</option>
+          </select>
+        </div>
+      </div>
+      <!-- Add more store items as needed -->
+    </div>
+    <div class="checkout">
+      <h2>Checkout</h2>
+      <div class="total">
+        <div>Total Items: <span id="total-items">0</span></div>
+        <div>Total Cost: $<span id="total-cost">0.00</span></div>
+      </div>
+    </div>
+  </div>
+
+  <section id="services" class="services">
+    <h3>Our Services</h3>
+    <p>We provide local and international shipping, express delivery, and secure parcel handling.</p>
+  </section>
+  
+  <footer>
+    <p>&copy; 2025 ShipNGo Courier. All rights reserved.</p>
+  </footer>
+
+  <script src="../scripts/store.js" defer></script>
+</body>
+</html>

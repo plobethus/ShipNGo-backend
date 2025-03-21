@@ -1,6 +1,5 @@
 // /ShipNGo-backend/server.js
-// This is the main server file that sets up Express, middleware, routes,
-// and serves static files for the ShipNGo frontend.
+// Main entry point: serves backend APIs and static frontend files
 
 const express = require("express");
 const path = require("path");
@@ -10,12 +9,12 @@ require("dotenv").config();
 
 const app = express();
 
-// CORS Configuration – allow cross-origin requests from your Vercel frontend with credentials.
+// CORS: allow same-origin (frontend is now hosted together with backend)
 app.use(cors({
-    origin: "https://ship-n-go-frontend.vercel.app", 
-    credentials: true,
-    methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"]
+  origin: true,
+  credentials: true,
+  methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
 // Middleware
@@ -23,17 +22,24 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// Serve frontend static files
-app.use(express.static(path.join(__dirname, "../ShipNGo-frontend")));
+// --- Serve static frontend from /frontend directory ---
+const frontendPath = path.join(__dirname, "../frontend");
+app.use(express.static(frontendPath));
 
-// ROUTES
-app.use("/auth", require("./routes/auth"));                    // Authentication routes (login, register, /me, dashboards)
-app.use("/tracking", require("./routes/tracking"));              // Tracking routes
-app.use("/shipment", require("./routes/shipment"));              // Shipment routes
-app.use("/packages", require("./routes/packageRoutes"));         // Package routes
-app.use("/edit", require("./routes/deliverypoints"));            // Delivery points routes (auth required)
-app.use("/claims", require("./routes/claimRoute"));              // Claims routes
-// app.use("/notifications", require("./routes/notifications"));  // Notifications routes (if needed)
+// --- API Routes ---
+app.use("/auth", require("./routes/auth"));                    
+app.use("/packages", require("./routes/packageRoutes"));         
+app.use("/tracking", require("./routes/tracking"));            
+app.use("/shipment", require("./routes/shipment"));            
+app.use("/edit", require("./routes/deliverypoints"));          
+app.use("/claims", require("./routes/claimRoute"));            
 
+
+// Catch-all: send frontend index.html for any unknown route (e.g. refreshing dashboard)
+app.get("*", (req, res) => {
+  res.sendFile(path.join(frontendPath, "index.html"));
+});
+
+// Start server
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

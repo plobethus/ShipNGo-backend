@@ -1,0 +1,99 @@
+<!-- ShipNGo/pages/create-shipment.html-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create a Shipment - ShipNGo</title>
+  <link rel="stylesheet" href="../styles/styles.css">
+</head>
+<body>
+  <div id="header-include"></div>
+  <script src="/scripts/header.js" defer></script>
+
+  <div class="shipment-container">
+    <h1>Create a Shipment</h1>
+    <div>
+      <form class="shipment-form">
+        <input type="text" id="sender-name" name="sender-name" placeholder="Sender Name" required>
+        <input type="text" id="sender-address" name="sender-address" placeholder="Sender Address" required>
+        <input type="text" id="receiver-name" name="receiver-name" placeholder="Receiver Name" required>
+        <input type="text" id="receiver-address" name="receiver-address" placeholder="Receiver Address" required>
+        <input type="number" id="package-weight" name="package-weight" placeholder="Package Weight (lbs)" required>
+        <select id="shipping-option" name="shipping-option" required>
+          <option value="">Shipping Option</option>
+          <option value="standard">Standard (5-7 Days)</option>
+          <option value="express">Express (2-3 Days)</option>
+          <option value="overnight">Overnight</option>
+        </select>
+        <button type="submit" class="btn">Submit Shipment</button>
+      </form>
+    </div>
+    <p id="shipment-result"></p>
+  </div>
+
+  <section id="services" class="services">
+    <h3>Our Services</h3>
+    <p>We provide local and international shipping, express delivery, and secure parcel handling.</p>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 ShipNGo Courier. All rights reserved.</p>
+  </footer>
+
+  <script>
+    document.querySelector(".shipment-form").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      // Collect form data
+      const senderName = document.getElementById("sender-name").value;
+      const senderAddress = document.getElementById("sender-address").value;
+      const receiverName = document.getElementById("receiver-name").value;
+      const receiverAddress = document.getElementById("receiver-address").value;
+      const packageWeight = document.getElementById("package-weight").value;
+      const shippingOption = document.getElementById("shipping-option").value;
+
+      // Check if all fields are filled
+      if (senderName && senderAddress && receiverName && receiverAddress && packageWeight && shippingOption) {
+        
+        // Prepare data for the POST request
+        const shipmentData = {
+          sender_name: senderName,
+          sender_address: senderAddress,
+          receiver_name: receiverName,
+          receiver_address: receiverAddress,
+          weight: packageWeight,
+          shipping_option: shippingOption
+        };
+
+        // Send data to the backend via API
+        fetch("http://localhost:3000/api/shipments", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(shipmentData)
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          document.getElementById("shipment-result").textContent = 
+            `Shipment Created! Tracking ID: ${data.ID}, Sender: ${senderName}, Receiver: ${receiverName}, Weight: ${packageWeight} lbs, Option: ${shippingOption}`;
+          document.getElementById("shipment-result").style.color = "green";
+        })
+        .catch(error => {
+          console.error("Error:", error);
+          document.getElementById("shipment-result").textContent = "Error creating shipment. Please try again.";
+          document.getElementById("shipment-result").style.color = "red";
+        });
+      } else {
+        document.getElementById("shipment-result").textContent = "Please fill in all fields.";
+        document.getElementById("shipment-result").style.color = "red";
+      }
+    });
+  </script>
+</body>
+</html>
+
+
