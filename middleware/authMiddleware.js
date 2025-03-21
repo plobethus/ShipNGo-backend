@@ -1,3 +1,5 @@
+//ShipNGo/middleware/authMiddleware.js
+
 // This middleware verifies JWT tokens for protected routes.
 // It now checks for the token in cookies (or falls back to the Authorization header).
 const jwt = require("jsonwebtoken");

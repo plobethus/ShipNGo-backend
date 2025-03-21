@@ -75,9 +75,10 @@ exports.register = async (req, res) => {
     );
     // Set cookie after registration
     res.cookie("token", token, { 
-      httpOnly: true, 
-      secure: process.env.NODE_ENV === 'production', 
-      sameSite: 'strict' 
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "None",
+      path: "/"
     });
     res.status(201).json({ message: "Registration successful" });
   } catch (error) {
