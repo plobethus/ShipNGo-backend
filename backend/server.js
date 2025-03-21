@@ -1,12 +1,16 @@
-/*
-* /ShipNGo/backend/server.js
-*/
+/* 
+ * /ShipNGo/backend/server.js
+ * Main server file using raw Node.js (no Express). 
+ * Updated to verify JWT for /packages/customer (and /packages/dashboard/employee) 
+ * so the backend returns JSON errors instead of fallback HTML if auth fails.
+ */
+
 const http = require("http");
 const url = require("url");
 const fs = require("fs");
 const path = require("path");
 require("dotenv").config();
-const { serveFile } = require("./helpers");
+const { serveFile, verifyToken } = require("./helpers");
 
 // Import route modules
 const authRoutes = require("./routes/auth");
@@ -20,8 +24,8 @@ const server = http.createServer(async (req, res) => {
   try {
     const parsedUrl = url.parse(req.url, true);
     const pathname = parsedUrl.pathname;
-    
-    // Routing for /auth endpoints
+
+    // ---- /auth endpoints ----
     if (pathname.startsWith("/auth")) {
       if (req.method === "POST" && pathname === "/auth/login") {
         await authRoutes.login(req, res);
@@ -32,14 +36,16 @@ const server = http.createServer(async (req, res) => {
       } else if (req.method === "GET" && pathname === "/auth/me") {
         await authRoutes.authMe(req, res);
         return;
-      } else if (req.method === "GET" && 
-                (pathname === "/auth/dashboard/customer" || pathname === "/auth/dashboard/employee")) {
+      } else if (
+        req.method === "GET" &&
+        (pathname === "/auth/dashboard/customer" || pathname === "/auth/dashboard/employee")
+      ) {
         authRoutes.serveDashboard(req, res);
         return;
       }
     }
-    
-    // Routing for /claims endpoints
+
+    // ---- /claims endpoints ----
     else if (pathname.startsWith("/claims")) {
       if (req.method === "GET" && pathname === "/claims") {
         await claimsRoutes.getClaims(req, res);
@@ -49,8 +55,8 @@ const server = http.createServer(async (req, res) => {
         return;
       }
     }
-    
-    // Routing for /edit (delivery points) endpoints
+
+    // ---- /edit (delivery points) endpoints ----
     else if (pathname.startsWith("/edit")) {
       if (req.method === "PUT" && pathname === "/edit/update_delivery_point_address") {
         await deliverpointsRoutes.updateDeliveryPointAddress(req, res);
@@ -60,25 +66,51 @@ const server = http.createServer(async (req, res) => {
         return;
       }
     }
-    
-    // Routing for /packages endpoints
+
+    // ---- /packages endpoints ----
     else if (pathname.startsWith("/packages")) {
+      // e.g. GET /packages/dashboard/employee
       if (req.method === "GET" && pathname === "/packages/dashboard/employee") {
+        // 1) Verify JWT
+        const tokenData = verifyToken(req);
+        if (!tokenData) {
+          // Return JSON error instead of fallback HTML
+          res.writeHead(401, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ message: "Unauthorized. No valid token for employee route." }));
+          return;
+        }
+        // Attach tokenData for the route to see
+        req.tokenData = tokenData;
+        // 2) Call route handler
         await packageRoutes.getPackagesEmployee(req, res, parsedUrl.query);
         return;
-      } else if (req.method === "PUT" && pathname.startsWith("/packages/")) {
-        // Expect URL of form /packages/{id}
+      }
+      // e.g. PUT /packages/123
+      else if (req.method === "PUT" && pathname.startsWith("/packages/")) {
         const parts = pathname.split("/");
         const id = parts[2];
+        // Possibly verify token as well if needed
         await packageRoutes.updatePackage(req, res, id);
         return;
-      } else if (req.method === "GET" && pathname === "/packages/customer") {
+      }
+      // e.g. GET /packages/customer
+      else if (req.method === "GET" && pathname === "/packages/customer") {
+        // 1) Verify JWT
+        const tokenData = verifyToken(req);
+        if (!tokenData) {
+          res.writeHead(401, { "Content-Type": "application/json" });
+          res.end(JSON.stringify({ message: "Unauthorized. No valid token for customer route." }));
+          return;
+        }
+        // Attach tokenData
+        req.tokenData = tokenData;
+        // 2) Call route
         await packageRoutes.getPackagesCustomer(req, res);
         return;
       }
     }
-    
-    // Routing for /shipment endpoints
+
+    // ---- /shipment endpoints ----
     else if (pathname.startsWith("/shipment")) {
       if (req.method === "POST" && pathname === "/shipment") {
         await shipmentRoutes.createShipment(req, res);
@@ -93,8 +125,8 @@ const server = http.createServer(async (req, res) => {
         return;
       }
     }
-    
-    // Routing for /tracking endpoints
+
+    // ---- /tracking endpoints ----
     else if (pathname.startsWith("/tracking")) {
       if (req.method === "GET" && pathname.startsWith("/tracking/")) {
         const parts = pathname.split("/");
@@ -106,7 +138,7 @@ const server = http.createServer(async (req, res) => {
         return;
       }
     }
-    
+
     // If no API route matches, try to serve a static file from the frontend folder.
     const filePath = path.join(__dirname, "../frontend", pathname);
     fs.stat(filePath, (err, stats) => {
@@ -134,7 +166,6 @@ const server = http.createServer(async (req, res) => {
         });
       }
     });
-    
   } catch (error) {
     res.statusCode = 500;
     res.end("Server error: " + error.message);
