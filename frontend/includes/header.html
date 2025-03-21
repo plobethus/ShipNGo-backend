@@ -3,38 +3,43 @@
   <a href="/index.html">
     <h1 class="navbar">ShipNGo</h1>
   </a>
+
   <ul>
-    <li>
-      <a href="#">Shipping</a>
-      <ul class="dropdown">
-        <li><a href="/pages/create-shipment.html">Create a Shipment</a></li>
-        <li><a href="/pages/pickups.html">Schedule &amp; Manage Pickups</a></li>
-        <li><a href="/pages/returns.html">Manage a Return</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#">Store</a>
-      <ul class="dropdown">
-        <li><a href="/pages/store.html">Packing &amp; Shipping Supplies</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#">Support</a>
-      <ul class="dropdown">
-        <li><a href="/pages/faq.html">FAQ</a></li>
-        <li><a href="/pages/claims.html">File a Claim</a></li>
-        <li><a href="/pages/billing.html">Billing &amp; Invoicing</a></li>
-      </ul>
-    </li>
-    <!-- Dashboard link hidden by default -->
-    <li id="dashboard-li" style="display: none;">
-      <a id="dashboard-link" href="#">Dashboard</a>
-    </li>
+    <!-- Publicly available: just the Home and maybe a direct link to a tracking page (optional) -->
+    <li><a href="/index.html">Home</a></li>
+
+    <!-- Everything else is behind login -->
+    <span id="protected-nav" style="display: none;">
+      <li>
+        <a href="#">Shipping</a>
+        <ul class="dropdown">
+          <li><a href="/pages/create-shipment.html">Create a Shipment</a></li>
+          <li><a href="/pages/pickups.html">Schedule &amp; Manage Pickups</a></li>
+          <li><a href="/pages/returns.html">Manage a Return</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#">Store</a>
+        <ul class="dropdown">
+          <li><a href="/pages/store.html">Packing &amp; Shipping Supplies</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#">Support</a>
+        <ul class="dropdown">
+          <li><a href="/pages/faq.html">FAQ</a></li>
+          <li><a href="/pages/claims.html">File a Claim</a></li>
+          <li><a href="/pages/billing.html">Billing &amp; Invoicing</a></li>
+        </ul>
+      </li>
+      <li id="dashboard-li" style="display: none;">
+        <a id="dashboard-link" href="#">Dashboard</a>
+      </li>
+    </span>
   </ul>
+
   <div class="login">
-    <!-- Login link is shown by default -->
     <a id="login-btn" href="/pages/login.html" class="btn">Log In</a>
-    <!-- Logout button is hidden by default -->
-    <button id="logout-btn" class="btn" style="display: none;">Logout</button>
+    <button id="logout-btn" class="btn" style="display:none;">Logout</button>
   </div>
 </nav>

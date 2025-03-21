@@ -1,25 +1,26 @@
-// /ShipNGo/frontend/scripts/header.js
+// /ShipNGo/frontend/scripts/header.jsgi
 document.addEventListener("DOMContentLoaded", () => {
   fetch("/includes/header.html")
-    .then((res) => res.text())
-    .then((html) => {
+    .then(res => res.text())
+    .then(html => {
       document.getElementById("header-include").innerHTML = html;
 
-      // After header loads, run post-load logic
       const role = sessionStorage.getItem("role");
       const name = sessionStorage.getItem("name");
 
-      // Dashboard link elements
+      const protectedNav = document.getElementById("protected-nav");
       const dashboardLi = document.getElementById("dashboard-li");
       const dashboardLink = document.getElementById("dashboard-link");
-
-      // Login/Logout elements
       const loginBtn = document.getElementById("login-btn");
       const logoutBtn = document.getElementById("logout-btn");
 
-      // If user is logged in (role + name in sessionStorage)
+      // If user is logged in, show protected nav + correct dashboard
       if (role && name) {
-        // Show dashboard link
+        protectedNav.style.display = "inline-block";  // or "block"
+        loginBtn.style.display = "none";
+        logoutBtn.style.display = "inline-block";
+
+        // Show the correct dashboard link
         dashboardLi.style.display = "block";
         if (role === "customer") {
           dashboardLink.href = "/pages/customer.html";
@@ -28,27 +29,19 @@ document.addEventListener("DOMContentLoaded", () => {
           dashboardLink.href = "/pages/employee.html";
           dashboardLink.textContent = "Employee Dashboard";
         }
-
-        // Hide login, show logout
-        loginBtn.style.display = "none";
-        logoutBtn.style.display = "inline-block";
       } else {
         // Not logged in
-        dashboardLi.style.display = "none";
+        protectedNav.style.display = "none";
         loginBtn.style.display = "inline-block";
         logoutBtn.style.display = "none";
       }
 
-      // Logout behavior
+      // Logout
       logoutBtn.addEventListener("click", () => {
-        // Clear session storage (removes role & name)
         sessionStorage.clear();
-        // Optionally, you might also call an endpoint to clear the cookie
-        // e.g. fetch("/auth/logout", { method: "POST", credentials: "include" })
-
-        // Redirect to login
+        // Optionally also call an endpoint to clear the token cookie if needed
         window.location.href = "/pages/login.html";
       });
     })
-    .catch((err) => console.error("Failed to load header:", err));
+    .catch(err => console.error("Failed to load header:", err));
 });
