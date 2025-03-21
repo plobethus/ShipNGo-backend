@@ -10,9 +10,9 @@ require("dotenv").config();
 
 const app = express();
 
-// CORS Configuration – ensure cross-origin requests from your Vercel frontend send cookies
+// CORS Configuration – allow cross-origin requests from your Vercel frontend with credentials.
 app.use(cors({
-    origin: "https://ship-n-go-frontend.vercel.app",  
+    origin: "https://ship-n-go-frontend.vercel.app", 
     credentials: true,
     methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"]
@@ -26,8 +26,8 @@ app.use(cookieParser());
 // Serve frontend static files
 app.use(express.static(path.join(__dirname, "../ShipNGo-frontend")));
 
-// ROUTES – add new routes here without creating extra constants.
-app.use("/auth", require("./routes/auth"));                    // Authentication routes (login, register, dashboards, /me)
+// ROUTES
+app.use("/auth", require("./routes/auth"));                    // Authentication routes (login, register, /me, dashboards)
 app.use("/tracking", require("./routes/tracking"));              // Tracking routes
 app.use("/shipment", require("./routes/shipment"));              // Shipment routes
 app.use("/packages", require("./routes/packageRoutes"));         // Package routes
