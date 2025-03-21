@@ -24,8 +24,8 @@ app.use("/tracking", require("./routes/tracking"));            // Tracking route
 app.use("/shipment", require("./routes/shipment"));            // Shipment routes
 app.use("/packages", require("./routes/packageRoutes"));       // Package routes
 app.use("/edit", require("./routes/deliverypoints"));           // Delivery points routes (auth required)
-app.use("/claims", require("./routes/claimRoutes"));           // Claims routes
-app.use("/notifications", require("./routes/notifications"));  // Notifications routes
+app.use("/claims", require("./routes/claimRoute"));           // Claims routes
+// app.use("/notifications", require("./routes/notifications"));  // Notifications routes
 
 //DO NOT CHANGE THIS
 const PORT = process.env.PORT || 8080; 
