@@ -12,8 +12,7 @@ module.exports = (role) => {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       console.log("Decoded Token:", decoded);
-
-      // For customers, expect a customer_id; for employees, expect an employee_id.
+      // For customers, expect a customer_id; for employees, an employee_id.
       if (role === "customer" && !decoded.customer_id) {
         console.error("Invalid token: No customer ID.");
         return res.status(403).json({ message: "Invalid token: No customer ID." });

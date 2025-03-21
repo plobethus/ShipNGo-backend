@@ -12,7 +12,7 @@ const app = express();
 
 // CORS Configuration – ensure cross-origin requests from your Vercel frontend send cookies
 app.use(cors({
-    origin: "https://ship-n-go-frontend.vercel.app",  // Replace with your actual frontend URL
+    origin: "https://ship-n-go-frontend.vercel.app",  
     credentials: true,
     methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"]

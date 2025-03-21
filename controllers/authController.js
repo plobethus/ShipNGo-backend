@@ -33,7 +33,6 @@ exports.login = async (req, res) => {
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch)
       return res.status(401).json({ message: "Invalid email or password" });
-    
     // Generate token with proper identifier
     const token = jwt.sign(
       user.role === "customer"
@@ -42,15 +41,13 @@ exports.login = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
-    
-    // Set the token in an HTTP-only cookie with cross-origin settings.
+    // Set the token in an HTTP-only cookie
     res.cookie("token", token, { 
       httpOnly: true, 
-      secure: true,               // Must be true in production (HTTPS)
-      sameSite: "None",           // Required for cross-origin cookies
+      secure: true,                    // Ensure HTTPS in production
+      sameSite: "None",                // Required for cross-origin cookies
       path: "/"
     });
-    
     res.status(200).json({ message: "Login successful", role: user.role, name: user.name });
   } catch (error) {
     console.error("Login error:", error);
@@ -77,7 +74,7 @@ exports.register = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
-    // Set the token cookie with the same options
+    // Set cookie after registration
     res.cookie("token", token, { 
       httpOnly: true,
       secure: true,
