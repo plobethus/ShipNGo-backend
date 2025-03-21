@@ -34,11 +34,11 @@ exports.getAllPackages = async (req, res) => {
       values.push(startDate, endDate);
     }
     if (minWeight) {
-      query += " AND p.weight >= ?";
+      query += " AND p.weight_kg >= ?";
       values.push(minWeight);
     }
     if (maxWeight) {
-      query += " AND p.weight <= ?";
+      query += " AND p.weight_kg <= ?";
       values.push(maxWeight);
     }
     if (address) {
