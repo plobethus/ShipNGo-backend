@@ -1,7 +1,7 @@
 /* 
  * /ShipNGo/backend/routes/deliverpoints.js
  * Routes for delivery point registration and updating delivery point addresses.
- * Note: This route is mounted as “/edit” in server.js.
+ * Mounted as "/edit" in server.js.
  */
 
 const express = require("express");

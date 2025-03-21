@@ -18,7 +18,7 @@ exports.login = async (req, res) => {
   if (!email || !password)
     return res.status(401).json({ message: "Invalid email or password" });
   try {
-    // Check in both customers and employees tables
+    // Check both customers and employees tables
     const [customerRows] = await db.execute(
       "SELECT customer_id AS id, name, password, 'customer' AS role FROM customers WHERE email = ?",
       [email]
@@ -34,7 +34,7 @@ exports.login = async (req, res) => {
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch)
       return res.status(401).json({ message: "Invalid email or password" });
-    // Generate JWT token with proper payload based on role
+    // Generate JWT token based on the user role
     const token = jwt.sign(
       user.role === "customer"
         ? { customer_id: user.id, role: "customer", name: user.name }
@@ -42,7 +42,7 @@ exports.login = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
-    // Set token in an HTTP-only, secure cookie (for production HTTPS and cross-origin scenarios)
+    // Set token in an HTTP-only, secure cookie
     res.cookie("token", token, { 
       httpOnly: true, 
       secure: true,

@@ -7,7 +7,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db"); // Use the configured database connection
 
-// Create a new shipment
+// Create a new shipment.
 router.post("/", (req, res) => {
     const { sender_id, recipient_id, weight, dimensions, shipping_cost, delivery_date } = req.body;
     if (!sender_id || !recipient_id || !weight || !dimensions || !shipping_cost || !delivery_date) {
@@ -23,7 +23,7 @@ router.post("/", (req, res) => {
     });
 });
 
-// Get all shipments
+// Get all shipments.
 router.get("/", (req, res) => {
     const sql = "SELECT * FROM shipments";
     db.query(sql, (err, results) => {
@@ -32,10 +32,10 @@ router.get("/", (req, res) => {
     });
 });
 
-// Get a single shipment by ID
+// Get a single shipment by ID.
 router.get("/:id", (req, res) => {
     const shipmentId = req.params.id;
-    // Updated to use "shipment_id" as the primary key
+    // Updated to use "shipment_id" as the primary key.
     const sql = "SELECT * FROM shipments WHERE shipment_id = ?";
     db.query(sql, [shipmentId], (err, result) => {
         if (err) return res.status(500).json({ error: err.message });

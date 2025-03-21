@@ -1,5 +1,5 @@
 /* 
- * /ShipNoGo/backend/controllers/claimController.js
+ * /ShipNGo/backend/controllers/claimController.js
  * Handles filing of claims and retrieval of claim data.
  */
 

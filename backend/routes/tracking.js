@@ -8,12 +8,12 @@ const { getTrackingInfo, updateTracking } = require("../controllers/trackingCont
 
 const router = express.Router();
 
-// Get tracking details by tracking ID
+// Get tracking details by tracking ID.
 router.get("/:tracking_id", (req, res, next) => {
   next();
 }, getTrackingInfo);
 
-// Add a new tracking update
+// Add a new tracking update.
 router.post("/", updateTracking);
 
 module.exports = router;
