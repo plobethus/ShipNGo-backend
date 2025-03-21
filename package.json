@@ -9,15 +9,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/plobethus/ShipNGo-backend.git"
+    "url": "git+https://github.com/plobethus/ShipNGo.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/plobethus/ShipNGo-backend/issues"
+    "url": "https://github.com/plobethus/ShipNGo/issues"
   },
-  "homepage": "https://github.com/plobethus/ShipNGo-backend#readme",
+  "homepage": "https://github.com/plobethus/ShipNGo#readme",
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.7",
