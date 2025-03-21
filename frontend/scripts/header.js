@@ -1,42 +1,28 @@
-/* 
- * /ShipNGo/frontend/scripts/header.js
- * Dynamically loads the header HTML and adjusts the Dashboard link based on the logged-in user.
- */
-
+// /ShipNGo/frontend/scripts/header.js
 document.addEventListener("DOMContentLoaded", () => {
   fetch("/includes/header.html")
-    .then(res => res.text())
-    .then(html => {
+    .then((res) => res.text())
+    .then((html) => {
       document.getElementById("header-include").innerHTML = html;
 
+      // After the header loads, update the dashboard link based on login info.
       const role = sessionStorage.getItem("role");
       const name = sessionStorage.getItem("name");
-      const userStatus = document.getElementById("user-status");
-      const logoutBtn = document.getElementById("logout-btn");
       const dashboardLi = document.getElementById("dashboard-li");
       const dashboardLink = document.getElementById("dashboard-link");
 
       if (role && name) {
-        userStatus.textContent = `Logged in as ${name} (${role})`;
-        logoutBtn.style.display = "inline-block";
-        if (role === "customer") {
-          dashboardLink.href = "dashboard/customer.html";
-          dashboardLink.innerText = "Customer Dashboard";
-        } else if (role === "employee") {
-          dashboardLink.href = "dashboard/employee.html";
-          dashboardLink.innerText = "Employee Dashboard";
-        }
         dashboardLi.style.display = "block";
+        if (role === "customer") {
+          dashboardLink.href = "/pages/customer.html";
+          dashboardLink.textContent = "Customer Dashboard";
+        } else if (role === "employee") {
+          dashboardLink.href = "/pages/employee.html";
+          dashboardLink.textContent = "Employee Dashboard";
+        }
       } else {
-        userStatus.textContent = "Guest";
-        logoutBtn.style.display = "none";
         dashboardLi.style.display = "none";
       }
-
-      logoutBtn?.addEventListener("click", () => {
-        sessionStorage.clear();
-        window.location.href = "/pages/login.html";
-      });
     })
-    .catch(err => console.error("Failed to load header:", err));
+    .catch((err) => console.error("Failed to load header:", err));
 });
