@@ -1,7 +1,7 @@
 /* 
  * /ShipNGo/backend/server.js
- * Main server file using raw Node.js (no Express). 
- * Only /tracking, /auth, /index.html, and static assets are public.
+ * Main server file using raw Node.js (no Express).
+ * Public routes: /tracking, /auth, /index.html, /pages/login.html, /pages/customer_registration.html, and static assets.
  * All other routes require a valid JWT token.
  */
 
@@ -58,10 +58,12 @@ const server = http.createServer(async (req, res) => {
         return;
       }
     }
-    // Homepage and static assets are public.
+    // Homepage, login, registration, and static assets are public.
     else if (
       pathname === "/" ||
       pathname === "/index.html" ||
+      pathname === "/pages/login.html" ||
+      pathname === "/pages/customer_registration.html" ||
       pathname.endsWith(".css") ||
       pathname.endsWith(".js") ||
       pathname.endsWith(".png") ||
@@ -69,7 +71,6 @@ const server = http.createServer(async (req, res) => {
       pathname.endsWith(".jpeg") ||
       pathname.startsWith("/includes/")
     ) {
-      // Serve the file from the frontend folder.
       const filePath = path.join(__dirname, "../frontend", pathname === "/" ? "index.html" : pathname);
       serveFile(res, filePath);
       return;
@@ -148,6 +149,7 @@ const server = http.createServer(async (req, res) => {
             }
           });
         } else {
+          // Fallback: serve index.html for SPA routing
           const indexFile = path.join(__dirname, "../frontend/index.html");
           fs.readFile(indexFile, (err, data) => {
             if (err) {
