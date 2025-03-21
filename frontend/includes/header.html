@@ -26,12 +26,15 @@
         <li><a href="/pages/billing.html">Billing &amp; Invoicing</a></li>
       </ul>
     </li>
-    <!-- Dashboard link hidden by default --> 
+    <!-- Dashboard link hidden by default -->
     <li id="dashboard-li" style="display: none;">
       <a id="dashboard-link" href="#">Dashboard</a>
     </li>
   </ul>
   <div class="login">
-    <a href="/pages/login.html" class="btn">Log In</a>
+    <!-- Login link is shown by default -->
+    <a id="login-btn" href="/pages/login.html" class="btn">Log In</a>
+    <!-- Logout button is hidden by default -->
+    <button id="logout-btn" class="btn" style="display: none;">Logout</button>
   </div>
 </nav>
