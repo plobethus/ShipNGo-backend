@@ -43,7 +43,7 @@ exports.login = async (req, res) => {
     // Set the token in an HttpOnly cookie
     res.cookie("token", token, { 
       httpOnly: true, 
-      secure: process.env.NODE_ENV === 'production', 
+      secure: true, 
       sameSite: "None" ,
       path: "/",
     });
@@ -76,7 +76,7 @@ exports.register = async (req, res) => {
     // Set cookie after registration
     res.cookie("token", token, { 
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
       sameSite: "None",
       path: "/"
     });
