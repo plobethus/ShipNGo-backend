@@ -1,41 +1,38 @@
-<!-- 
- * /ShipNGo/frontend/pages/login.html
- * Login page for ShipNGo.
- -->
- <!DOCTYPE html>
- <html lang="en">
- <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Login - ShipNGo</title>
-   <link rel="stylesheet" href="../styles/styles.css">
- </head>
- <body>
-   <div id="header-include"></div>
-   <script src="/scripts/header.js" defer></script>
-   
-   <section class="login-container">
-     <div class="login-title">Login</div>
-     <form id="login-form">
-       <input type="text" id="email" name="email" placeholder="Email" required>
-       <input type="password" id="password" name="password" placeholder="Password" required>
-       <button type="submit" class="login-button">Login</button>
-       <div class="register-today">
-         <a href="./customer_registration.html" style="color:white">Don't have an account? Register now!</a>
-       </div>
-     </form>
-     <p id="message"></p>
-   </section>
- 
-   <section id="services" class="services">
-     <h3>Our Services</h3>
-     <p>We provide local and international shipping, express delivery, and secure parcel handling.</p>
-   </section>
-   
-   <footer>
-     <p>&copy; 2025 ShipNGo Courier. All rights reserved.</p>
-   </footer>
- 
-   <script src="../scripts/login.js"></script>
- </body>
- </html>
+<!-- /ShipNGo/frontend/pages/login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - ShipNGo</title>
+  <link rel="stylesheet" href="../styles/styles.css" />
+</head>
+<body>
+  <div id="header-include"></div>
+  <script src="/scripts/header.js" defer></script>
+  
+  <section class="login-container">
+    <div class="login-title">Login</div>
+    <form id="login-form">
+      <input type="text" id="email" name="email" placeholder="Email" required />
+      <input type="password" id="password" name="password" placeholder="Password" required />
+      <button type="submit" class="login-button">Login</button>
+      <div class="register-today">
+        <a href="/pages/customer_registration.html" style="color:white;">Don't have an account? Register now!</a>
+      </div>
+    </form>
+    <p id="message"></p>
+  </section>
+
+  <section id="services" class="services">
+    <h3>Our Services</h3>
+    <p>We provide local and international shipping, express delivery, and secure parcel handling.</p>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 ShipNGo Courier. All rights reserved.</p>
+  </footer>
+
+  <script src="../scripts/login.js"></script>
+</body>
+</html>

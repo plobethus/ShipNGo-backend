@@ -1,8 +1,4 @@
-/* 
- * /Login/frontend/scripts/login.js
- * Handles user login and redirects based on role.
- */
-
+// /ShipNGo/frontend/scripts/login.js
 document.getElementById("login-form").addEventListener("submit", async (event) => {
   event.preventDefault();
 
@@ -22,16 +18,18 @@ document.getElementById("login-form").addEventListener("submit", async (event) =
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
-      credentials: "include"
+      credentials: "include" // ensures cookies are sent and received
     });
     const data = await response.json();
     if (response.ok) {
+      // Store user role and name if needed
       sessionStorage.setItem("role", data.role);
       sessionStorage.setItem("name", data.name);
+      // Redirect based on role
       if (data.role === "customer") {
-        window.location.href = "dashboard/customer.html";
+        window.location.href = "/pages/customer.html";
       } else if (data.role === "employee") {
-        window.location.href = "dashboard/employee.html";
+        window.location.href = "/pages/employee.html";
       }
     } else {
       messageElement.innerText = data.message || "Login failed. Please try again.";

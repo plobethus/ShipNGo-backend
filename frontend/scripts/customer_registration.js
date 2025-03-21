@@ -1,8 +1,4 @@
-/* 
- * /ShipNGo/frontend/scripts/customer_registration.js
- * Handles customer registration form submission.
- */
-
+// /ShipNGo/frontend/scripts/customer_registration.js
 document.addEventListener("DOMContentLoaded", function () {
   const registrationForm = document.getElementById("login-form");
 
@@ -29,9 +25,9 @@ document.addEventListener("DOMContentLoaded", function () {
       const data = await response.json();
       if (response.ok) {
         document.getElementById("message").textContent = "Registration successful! Redirecting...";
-        sessionStorage.setItem("token", data.token);
+        // Optionally, store token if needed
         setTimeout(() => {
-          window.location.href = "./login.html";
+          window.location.href = "/pages/login.html";
         }, 2000);
       } else {
         document.getElementById("message").textContent = data.message || "Registration failed.";

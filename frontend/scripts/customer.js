@@ -1,36 +1,5 @@
-/* 
- * /ShipNGo/frontend/scripts/customer.js
- * Retrieves and displays packages for an authenticated customer.
- */
-
+// /ShipNGo/frontend/scripts/customer.js
 document.addEventListener("DOMContentLoaded", async function () {
-  try {
-    const authResponse = await fetch("/auth/me", {
-      method: "GET",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" }
-    });
-    if (!authResponse.ok) {
-      window.location.href = "/pages/login.html";
-      return;
-    }
-    const authData = await authResponse.json();
-    if (authData.role !== "customer") {
-      window.location.href = "/pages/login.html";
-      return;
-    }
-    const welcomeDiv = document.getElementById("welcome-message");
-    if (welcomeDiv) {
-      welcomeDiv.innerText = `Welcome, ${authData.name} (Customer)`;
-    }
-    await loadPackages();
-  } catch (error) {
-    console.error("Error verifying authentication:", error);
-    window.location.href = "/pages/login.html";
-  }
-});
-
-async function loadPackages() {
   try {
     const response = await fetch("/packages/customer", {
       method: "GET",
@@ -75,4 +44,4 @@ async function loadPackages() {
     console.error("Error fetching customer packages:", error);
     document.getElementById("customer-packages").innerHTML = `<p>Error fetching packages.</p>`;
   }
-}
+});

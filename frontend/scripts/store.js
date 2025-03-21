@@ -1,8 +1,4 @@
-/* 
- * /ShipNGo/frontend/scripts/store.js
- * Implements a simple shopping cart for the ShipNGo store page.
- */
-
+// /ShipNGo/frontend/scripts/store.js
 let cart = {};
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -20,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function updateCart(item, price, quantity) {
   if (!cart[item]) {
-    cart[item] = { quantity: 0, price: price };
+    cart[item] = { quantity: 0, price };
   }
   cart[item].quantity += quantity;
   if (cart[item].quantity < 0) {

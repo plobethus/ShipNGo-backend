@@ -1,8 +1,4 @@
-/* 
- * /ShipNGo/frontend/scripts/trackingpage.js
- * Fetches and displays tracking details based on the tracking number provided in the URL.
- */
-
+// /ShipNGo/frontend/scripts/trackingpage.js
 document.addEventListener("DOMContentLoaded", async function () {
   const urlParams = new URLSearchParams(window.location.search);
   const trackingNumber = urlParams.get('trackingNumber');

@@ -1,28 +1,7 @@
-/* 
- * /ShipNGo/frontend/scripts/employee.js
- * Retrieves and displays packages for an authenticated employee, including filtering and quick update functionality.
- */
-
+// /ShipNGo/frontend/scripts/employee.js
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    const authResponse = await fetch("/auth/me", {
-      method: "GET",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" }
-    });
-    if (!authResponse.ok) {
-      window.location.href = "/pages/login.html";
-      return;
-    }
-    const authData = await authResponse.json();
-    if (authData.role !== "employee") {
-      window.location.href = "/pages/login.html";
-      return;
-    }
-    const welcomeDiv = document.getElementById("welcome-message");
-    if (welcomeDiv) {
-      welcomeDiv.innerText = `Welcome, ${authData.name} (Employee)`;
-    }
+    // (Optionally, verify employee authentication here via /auth/me)
     document.getElementById("status-filter")?.addEventListener("change", loadPackages);
     document.getElementById("search-customer")?.addEventListener("input", debounce(loadPackages, 500));
     document.getElementById("start-date")?.addEventListener("change", loadPackages);
@@ -33,7 +12,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     await loadPackages();
   } catch (error) {
-    console.error("Error during authentication:", error);
+    console.error("Error during employee authentication:", error);
     window.location.href = "/pages/login.html";
   }
 });
@@ -56,7 +35,7 @@ async function loadPackages() {
     maxWeight: document.getElementById("max-weight")?.value || "",
     address: document.getElementById("address-filter")?.value || ""
   });
-  const url = `/packages/dashboard/employee?${params}`;
+  const url = `/packages/dashboard/employee?${params.toString()}`;
   try {
     const response = await fetch(url, {
       method: "GET",

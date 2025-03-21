@@ -1,8 +1,4 @@
-/* 
- * /ShipNGo/frontend/scripts/index.js
- * Handles tracking form submission on the home page.
- */
-
+// /ShipNGo/frontend/scripts/index.js
 document.addEventListener("DOMContentLoaded", function () {
   const trackingForm = document.getElementById("tracking-form");
   if (trackingForm) {
@@ -21,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const response = await fetch(`/tracking/${trackingID}`);
         const data = await response.json();
         if (response.ok) {
-          window.location.href = `./pages/trackingpage.html?trackingNumber=${trackingID}`;
+          window.location.href = `/pages/trackingpage.html?trackingNumber=${trackingID}`;
         } else {
           resultElement.textContent = data.message || "Tracking ID not found.";
           resultElement.style.color = "red";

@@ -1,15 +1,11 @@
-/* 
- * /ShipNGo/frontend/scripts/claims.js
- * Handles submission of a new claim and dynamically loads support tickets.
- */
-
+// /ShipNGo/frontend/scripts/claims.js
 document.getElementById("support-form").addEventListener("submit", async function (event) {
   event.preventDefault();
 
   const name = document.getElementById("name").value.trim();
   const email = document.getElementById("email").value.trim();
   const phone = document.getElementById("phone").value.trim();
-  const issue = document.getElementById("issue").value.trim(); // Stored as 'reason' in the DB
+  const issue = document.getElementById("issue").value.trim(); // stored as 'reason' in the DB
 
   if (!name || !email || !phone || !issue) {
     alert("Please fill in all fields.");
