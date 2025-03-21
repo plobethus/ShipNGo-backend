@@ -2,7 +2,7 @@
 // This controller handles authentication logic (login and registration)
 // and now sets JWT tokens as HTTP-only cookies.
 const db = require("../config/db");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 // Ensure JWT_SECRET is set
