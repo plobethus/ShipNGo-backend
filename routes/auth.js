@@ -1,6 +1,7 @@
-//ShipNGo-backend/routes/auth.js
+// /ShipNGo-backend/routes/auth.js
 // This route file handles authentication endpoints for login, registration,
-// and serves the secure dashboard pages using auth middleware.
+// and serves secure dashboard pages plus an endpoint (/me) to return user info.
+
 const express = require("express");
 const { login, register } = require("../controllers/authController");
 const router = express.Router();
@@ -18,8 +19,9 @@ router.get("/dashboard/customer", authMiddleware("customer"), (req, res) => {
 router.get("/dashboard/employee", authMiddleware("employee"), (req, res) => {
   res.sendFile(path.join(__dirname, "../ShipNGo-frontend/pages/dashboard/employee.html"));
 });
+
+// /auth/me endpoint returns the decoded user info from the token.
 router.get("/me", authMiddleware(), (req, res) => {
-  // This endpoint returns the decoded user info from the token.
   res.json({ role: req.user.role, name: req.user.name });
 });
 

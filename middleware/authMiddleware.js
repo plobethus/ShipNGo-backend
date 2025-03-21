@@ -1,7 +1,6 @@
-//ShipNGo/middleware/authMiddleware.js
+// /ShipNGo-backend/middleware/authMiddleware.js
+// This middleware verifies JWT tokens for protected routes by reading the token from cookies.
 
-// This middleware verifies JWT tokens for protected routes.
-// It now checks for the token in cookies (or falls back to the Authorization header).
 const jwt = require("jsonwebtoken");
 
 module.exports = (role) => {
@@ -10,12 +9,11 @@ module.exports = (role) => {
     if (!token) {
       return res.status(401).json({ message: "No token provided." });
     }
-
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       console.log("Decoded Token:", decoded);
 
-      // For customers, expect a customer_id; for employees, an employee_id.
+      // For customers, expect a customer_id; for employees, expect an employee_id.
       if (role === "customer" && !decoded.customer_id) {
         console.error("Invalid token: No customer ID.");
         return res.status(403).json({ message: "Invalid token: No customer ID." });

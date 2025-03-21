@@ -1,6 +1,7 @@
-//ShipNGo-backend/controllers/authController.js
+// /ShipNGo-backend/controllers/authController.js
 // This controller handles authentication logic (login and registration)
-// and now sets JWT tokens as HTTP-only cookies.
+// and sets JWT tokens as HTTP-only cookies.
+
 const db = require("../config/db");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -13,7 +14,7 @@ if (!process.env.JWT_SECRET) {
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
-  if (!email || !password) 
+  if (!email || !password)
     return res.status(401).json({ message: "Invalid email or password" });
   try {
     // Check both customers and employees
@@ -26,12 +27,13 @@ exports.login = async (req, res) => {
       [email]
     );
     const rows = customerRows.length ? customerRows : employeeRows;
-    if (rows.length === 0) 
+    if (rows.length === 0)
       return res.status(401).json({ message: "Invalid email or password" });
     const user = rows[0];
     const passwordMatch = await bcrypt.compare(password, user.password);
-    if (!passwordMatch) 
+    if (!passwordMatch)
       return res.status(401).json({ message: "Invalid email or password" });
+    
     // Generate token with proper identifier
     const token = jwt.sign(
       user.role === "customer"
@@ -40,13 +42,15 @@ exports.login = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
-    // Set the token in an HttpOnly cookie
+    
+    // Set the token in an HTTP-only cookie with cross-origin settings.
     res.cookie("token", token, { 
       httpOnly: true, 
-      secure: true, 
-      sameSite: "None" ,
-      path: "/",
+      secure: true,               // Must be true in production (HTTPS)
+      sameSite: "None",           // Required for cross-origin cookies
+      path: "/"
     });
+    
     res.status(200).json({ message: "Login successful", role: user.role, name: user.name });
   } catch (error) {
     console.error("Login error:", error);
@@ -73,7 +77,7 @@ exports.register = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
-    // Set cookie after registration
+    // Set the token cookie with the same options
     res.cookie("token", token, { 
       httpOnly: true,
       secure: true,
