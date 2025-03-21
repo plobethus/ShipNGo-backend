@@ -33,7 +33,7 @@ app.use("/auth", require("./routes/auth"));
 app.use("/packages", require("./routes/packageRoutes"));
 app.use("/tracking", require("./routes/tracking"));
 app.use("/shipment", require("./routes/shipment"));
-app.use("/edit", require("./routes/deliverpoints"));
+app.use("/edit", require("./routes/deliverypoints"));
 app.use("/claims", require("./routes/claimRoute"));
 
 // Catch-all: send frontend index.html for any unknown route (useful for SPA routing).
