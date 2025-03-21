@@ -9,12 +9,6 @@ require("dotenv").config();
 
 const app = express();
 
-// Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cors());
-app.use(cookieParser());
-
 // CORS Configuration
 app.use(cors({
     origin: "https://ship-n-go-frontend.vercel.app", 
@@ -23,6 +17,10 @@ app.use(cors({
     allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 
 // Serve frontend static files
