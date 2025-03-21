@@ -1,4 +1,6 @@
-/*const express = require("express");
+//ShipNGo-backend/routes/
+
+const express = require("express");
 const { getAllPackages, updatePackage, getCustomerPackages } = require("../controllers/packageController");
 const authMiddleware = require("../middleware/authMiddleware");
 
@@ -12,7 +14,7 @@ router.put("/:id", authMiddleware("employee"), updatePackage);
 router.get("/customer", authMiddleware("customer"), getCustomerPackages);
 
 module.exports = router;
-*/
+
 
 
 

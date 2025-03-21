@@ -1,3 +1,5 @@
+//ShipNGo-backend/controllers/trackingController.js
+
 const db = require("../config/db");
 
 exports.getTrackingInfo = async (req, res) => {

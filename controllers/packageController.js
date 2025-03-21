@@ -1,3 +1,5 @@
+//ShipNGo-backend/controllers/packageController.js
+
 const db = require("../config/db");
 
 exports.getAllPackages = async (req, res) => {

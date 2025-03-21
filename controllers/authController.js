@@ -1,3 +1,5 @@
+//ShipNGo-backend/controllers/authController.js
+
 const db = require("../config/db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");

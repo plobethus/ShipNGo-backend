@@ -1,3 +1,5 @@
+//ShipNGo-backend/models/userModel.js
+
 const db = require("../config/db");
 
 exports.getUserByEmail = async (email) => {

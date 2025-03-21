@@ -1,3 +1,5 @@
+//ShipNGo-backend/routes/deliverpoints.js
+
 const express = require("express");
 const authMiddleware = require("../middleware/authMiddleware");
 const { put_address_to_delivery_point, register_delivery_point } = require("../controllers/deliveryPointsController");

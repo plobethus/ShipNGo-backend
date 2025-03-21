@@ -1,3 +1,5 @@
+//ShipNGo-backend/models/trackingModel.js
+
 const db = require("../config/db");
 
 exports.getTrackingByPackageId = async (package_id) => {
