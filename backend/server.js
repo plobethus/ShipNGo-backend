@@ -1,9 +1,11 @@
 /* 
- * /ShipNGo/backend/server.js
+ * /ShipNGo-backend/backend/server.js
  * Main server file using raw Node.js (no Express).
- * Public routes: /tracking, /auth, /index.html, /pages/login.html, /pages/customer_registration.html, and static assets.
+ * Public routes: /tracking, /auth, /index.html, /pages/login.html, /pages/customer_registration.html,
+ * /pages/trackingpage.html, and static assets.
  * All other routes require a valid JWT token.
  */
+
 const http = require("http");
 const url = require("url");
 const fs = require("fs");
@@ -18,10 +20,6 @@ const deliverpointsRoutes = require("./routes/deliverpoints");
 const packageRoutes = require("./routes/packageRoutes");
 const shipmentRoutes = require("./routes/shipment");
 const trackingRoutes = require("./routes/tracking");
-
-
-console.log("DB_HOST:", process.env.DB_HOST);
-console.log("JWT_SECRET:", process.env.JWT_SECRET);
 
 const server = http.createServer(async (req, res) => {
   try {
@@ -61,13 +59,13 @@ const server = http.createServer(async (req, res) => {
         return;
       }
     }
-    // Homepage, login, registration, and static assets are public.
+    // Homepage, login, registration, tracking page, and static assets are public.
     else if (
       pathname === "/" ||
       pathname === "/index.html" ||
       pathname === "/pages/login.html" ||
-      pathname === "/pages/trackingpage.html" ||
       pathname === "/pages/customer_registration.html" ||
+      pathname === "/pages/trackingpage.html" ||
       pathname.endsWith(".css") ||
       pathname.endsWith(".js") ||
       pathname.endsWith(".png") ||
@@ -138,7 +136,7 @@ const server = http.createServer(async (req, res) => {
         return;
       }
     }
-    // If no route matched among protected routes, serve static file (fallback)
+    // If no protected route matched, attempt to serve a static file from the frontend folder.
     else {
       const filePath = path.join(__dirname, "../frontend", pathname);
       fs.stat(filePath, (err, stats) => {
@@ -178,3 +176,7 @@ const PORT = process.env.PORT || 8080;
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+
+console.log("DB_HOST:", process.env.DB_HOST);
+console.log("JWT_SECRET:", process.env.JWT_SECRET);
