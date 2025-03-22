@@ -1,34 +1,54 @@
 /* /ShipNGo/frontend/styles/nav.css */
 
+/* Main nav container */
 nav {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-between;  /* brand/logo on left, everything else on right */
     background-color: #004080;
     padding: 20px 40px;
     color: white;
   }
   
+  /* Logo or brand text, e.g. ShipNGo */
   nav .navbar {
     font-size: 1.5rem;
     font-weight: bold;
+    color: #fff;
+    text-decoration: none; /* if it's an <a> link */
   }
   
+  /* The main UL elements for your nav lists */
   nav ul {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: flex;
-    gap: 20px;
+    display: flex;  /* items horizontally aligned */
+    gap: 20px;      /* space between items */
   }
   
+  /* Public vs. protected nav lists */
   .public-nav,
   #protected-nav {
     display: flex;
     align-items: center;
   }
   
-  /* Dropdown menu styling */
+  /* Individual nav items */
+  nav ul li {
+    position: relative; /* needed for dropdown positioning */
+  }
+  
+  /* Links in the nav items */
+  nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    display: block;      /* ensures the link covers the li's area */
+    padding: 5px 0;      /* slight vertical padding */
+  }
+  
+  /* Dropdown sub-menu styling */
   .dropdown {
     display: none;
     position: absolute;
@@ -42,22 +62,28 @@ nav {
     z-index: 1000;
   }
   
+  /* Dropdown items */
   .dropdown li {
     padding: 10px;
     white-space: nowrap;
   }
-  
   .dropdown li a {
     color: black;
     text-decoration: none;
     display: block;
   }
   
+  /* Show the dropdown on hover */
   nav ul li:hover .dropdown {
     display: block;
   }
   
-  /* Login/Logout button styling */
+  /* The login container for login/logout buttons */
+  .login {
+    margin-left: auto; /* if you want it pushed far right */
+  }
+  
+  /* Style for both login (a) and logout (button) */
   .login a,
   .login button {
     background-color: #ffcc00;
