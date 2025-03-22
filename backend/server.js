@@ -63,7 +63,7 @@ const server = http.createServer(async (req, res) => {
       pathname === "/" ||
       pathname === "/index.html" ||
       pathname === "/pages/login.html" ||
-      pathname == "/pages/tracking.js" ||
+      pathname === "/pages/tracking.js" ||
       pathname === "/pages/customer_registration.html" ||
       pathname.endsWith(".css") ||
       pathname.endsWith(".js") ||
