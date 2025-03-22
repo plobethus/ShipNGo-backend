@@ -1,0 +1,82 @@
+/* nav.css
+ * Navigation-specific styles extracted from styles.css
+ */
+
+/* Top-level nav container */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #004080;
+    color: white;
+  }
+  
+  /* "navbar" class, if used for brand or site title */
+  .navbar {
+    margin-right: 50px;
+    color: white;
+  }
+  
+  /* Login button area */
+  .login {
+    margin-left: auto;
+  }
+  .login a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    background-color: #ffcc00;
+    border-radius: 5px;
+  }
+  
+  /* Basic nav list styling */
+  nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 20px;
+  }
+  
+  /* Each nav item */
+  nav ul li {
+    position: relative;  /* for dropdown positioning */
+    margin-left: 20px;
+  }
+  
+  /* Nav links */
+  nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  /* Dropdown menu styling */
+  .dropdown {
+    display: none;
+    position: absolute;
+    background: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    top: 100%;
+    left: 0;
+    min-width: 200px;
+    z-index: 1000;
+  }
+  .dropdown li {
+    display: block;
+    padding: 10px;
+    white-space: nowrap;
+  }
+  .dropdown li a {
+    text-decoration: none;
+    color: black;
+    display: block;
+  }
+  .dropdown li:hover {
+    background: #f4f4f4;
+  }
+  nav ul li:hover .dropdown {
+    display: block;
+  }
