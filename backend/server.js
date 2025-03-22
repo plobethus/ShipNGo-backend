@@ -4,7 +4,7 @@
  * Public routes: /tracking, /auth, /index.html, /pages/login.html, /pages/customer_registration.html, and static assets.
  * All other routes require a valid JWT token.
  */
-
+require('dotenv').config();
 const http = require("http");
 const url = require("url");
 const fs = require("fs");
