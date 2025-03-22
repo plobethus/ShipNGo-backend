@@ -1,58 +1,47 @@
-/* nav.css
- * Navigation-specific styles extracted from styles.css
- */
+/* /ShipNGo/frontend/styles/nav.css */
 
-/* Top-level nav container */
+/* Ensure the nav container spans the full width with space between items */
 nav {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 20px;
+    justify-content: space-between;
     background-color: #004080;
+    padding: 20px 40px; /* extra horizontal padding */
     color: white;
   }
   
-  /* "navbar" class, if used for brand or site title */
-  .navbar {
-    margin-right: 50px;
-    color: white;
-  }
-  
-  /* Login button area */
-  .login {
-    margin-left: auto;
-  }
-  .login a {
-    color: white;
-    text-decoration: none;
-    padding: 10px 15px;
-    background-color: #ffcc00;
-    border-radius: 5px;
-  }
-  
-  /* Basic nav list styling */
-  nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    gap: 20px;
-  }
-  
-  /* Each nav item */
-  nav ul li {
-    position: relative;  /* for dropdown positioning */
-    margin-left: 20px;
-  }
-  
-  /* Nav links */
-  nav ul li a {
-    color: #fff;
-    text-decoration: none;
+  /* Style the logo (if needed) */
+  nav .navbar {
+    font-size: 1.5rem;
     font-weight: bold;
   }
   
-  /* Dropdown menu styling */
+  /* The main nav list should use flex and spread out items */
+  nav ul {
+    display: flex;
+    flex: 1;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    justify-content: space-around;  /* Evenly space out items */
+  }
+  
+  /* Each nav item takes equal width and centers its text */
+  nav ul li {
+    flex: 1;
+    text-align: center;
+    position: relative;
+  }
+  
+  /* Nav links styling */
+  nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    display: block;
+    padding: 10px 0;
+  }
+  
+  /* Dropdown styling */
   .dropdown {
     display: none;
     position: absolute;
@@ -65,18 +54,29 @@ nav {
     z-index: 1000;
   }
   .dropdown li {
-    display: block;
     padding: 10px;
     white-space: nowrap;
   }
   .dropdown li a {
-    text-decoration: none;
     color: black;
+    text-decoration: none;
     display: block;
-  }
-  .dropdown li:hover {
-    background: #f4f4f4;
   }
   nav ul li:hover .dropdown {
     display: block;
+  }
+  
+  /* Login/Logout container, if needed */
+  .login {
+    margin-left: auto;
+  }
+  .login a,
+  .login button {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    background-color: #ffcc00;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
   }
