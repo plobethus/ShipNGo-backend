@@ -1,51 +1,39 @@
 /* /ShipNGo/frontend/styles/nav.css */
 
-/* Ensure the nav container spans the full width with space between items */
 nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
     background-color: #004080;
-    padding: 20px 40px; /* extra horizontal padding */
+    padding: 20px 40px;
     color: white;
   }
   
-  /* Style the logo (if needed) */
   nav .navbar {
     font-size: 1.5rem;
     font-weight: bold;
   }
   
-  /* The main nav list should use flex and spread out items */
   nav ul {
-    display: flex;
-    flex: 1;
     list-style: none;
     margin: 0;
     padding: 0;
-    justify-content: space-around;  /* Evenly space out items */
+    display: flex;
+    gap: 20px;
   }
   
-  /* Each nav item takes equal width and centers its text */
-  nav ul li {
-    flex: 1;
-    text-align: center;
-    position: relative;
+  .public-nav,
+  #protected-nav {
+    display: flex;
+    align-items: center;
   }
   
-  /* Nav links styling */
-  nav ul li a {
-    color: #fff;
-    text-decoration: none;
-    display: block;
-    padding: 10px 0;
-  }
-  
-  /* Dropdown styling */
+  /* Dropdown menu styling */
   .dropdown {
     display: none;
     position: absolute;
     background: white;
+    color: black;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     top: 100%;
@@ -53,30 +41,38 @@ nav {
     min-width: 200px;
     z-index: 1000;
   }
+  
   .dropdown li {
     padding: 10px;
     white-space: nowrap;
   }
+  
   .dropdown li a {
     color: black;
     text-decoration: none;
     display: block;
   }
+  
   nav ul li:hover .dropdown {
     display: block;
   }
   
-  /* Login/Logout container, if needed */
-  .login {
-    margin-left: auto;
-  }
+  /* Login/Logout button styling */
   .login a,
   .login button {
-    color: white;
+    background-color: #ffcc00;
+    color: #333;
+    border: none;
+    border-radius: 5px;
     text-decoration: none;
     padding: 10px 15px;
-    background-color: #ffcc00;
-    border-radius: 5px;
-    border: none;
+    margin-left: 10px;
     cursor: pointer;
+    font-weight: bold;
+    display: inline-block;
+  }
+  
+  .login a:hover,
+  .login button:hover {
+    background-color: #ffdd22;
   }
