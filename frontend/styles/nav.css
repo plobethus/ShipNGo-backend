@@ -16,6 +16,7 @@ nav {
     font-weight: bold;
     color: #fff;
     text-decoration: none; /* if it's an <a> link */
+    margin-right:20px;
   }
   
   /* The main UL elements for your nav lists */
