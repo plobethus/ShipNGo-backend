@@ -19,6 +19,10 @@ const packageRoutes = require("./routes/packageRoutes");
 const shipmentRoutes = require("./routes/shipment");
 const trackingRoutes = require("./routes/tracking");
 
+
+console.log("DB_HOST:", process.env.DB_HOST);
+console.log("JWT_SECRET:", process.env.JWT_SECRET);
+
 const server = http.createServer(async (req, res) => {
   try {
     const parsedUrl = url.parse(req.url, true);
