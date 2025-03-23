@@ -1,23 +1,13 @@
-// /ShipNGo-frontend/scripts/notifications.js
-
-async function fetchNotificationCount() {
-    try {
-      const res = await fetch("http://localhost:5000/notifications/unread");
-      const data = await res.json();
-      
-      const countElement = document.getElementById("notification-count");
-      if (data.count > 0) {
-        countElement.textContent = data.count;
-        countElement.style.display = "block";
-      } else {
-        countElement.style.display = "none";
-      }
-    } catch (error) {
-      console.error("Error fetching notifications:", error);
-    }
-  }
+document.addEventListener('DOMContentLoaded', function () {
+    fetchNotificationCount();
+  });
   
-  // Run on page load and every 10 seconds
-  document.addEventListener("DOMContentLoaded", fetchNotificationCount);
-  setInterval(fetchNotificationCount, 10000);
+  function fetchNotificationCount() {
+    fetch('/api/notifications/count')
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('notification-count').textContent = data.count;
+      })
+      .catch(error => console.error('Error fetching notification count:', error));
+  }
   

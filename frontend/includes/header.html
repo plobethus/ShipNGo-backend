@@ -1,11 +1,15 @@
-<!-- /ShipNGo/frontend/includes/header.html -->
 <nav>
-
-
-  <!-- Protected nav items, hidden by default -->
+  <!-- Existing Protected nav items, remains unchanged -->
   <ul id="protected-nav" style="display: none;">
     <li>
-        <a href="/index.html"><h1 class="navbar">ShipNGo</h1></a>
+        <a href="/index.html">
+            <h1 class="navbar">ShipNGo</h1>
+            <!-- Notification bell button added here -->
+            <button class="notification-bell">
+              <img src="/icons/bell-icon.png" alt="Notifications">
+              <span id="notification-count" class="notification-count">0</span>
+            </button>
+        </a>
     </li>
     <li>
       <a href="#">Shipping</a>
@@ -31,7 +35,7 @@
     </li>
   </ul>
 
-  <div class = "profile">
+  <div class="profile">
     <ul>
         <a id="dashboard-link" href="#">Dashboard</a> 
     </ul>
