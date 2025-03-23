@@ -103,3 +103,10 @@ nav {
   .login button:hover {
     background-color: #ffdd22;
   }
+
+  .profile{
+    display:flex;
+    flex-direction:row;
+    color:white;
+
+  }
