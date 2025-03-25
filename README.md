@@ -1,4 +1,4 @@
-# ShipNGo-backend
+# ShipNGo
 This is the backend and frontend for shipngo, created with html,css, javascript and NodeJS. It is hosted entirely on Azure as a web app.
 
 ## Created by
