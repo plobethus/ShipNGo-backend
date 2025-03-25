@@ -46,15 +46,13 @@ async function appendStopToRoute(req, res) {
             return;
         }
 
-        const orderedStops = await stopsController.getOrderedStopsByRouteId(route_id);
-        const lastStop = orderedStops.length > 0 ? orderedStops[orderedStops.length - 1] : null;
-        const previous_stop_id = lastStop ? lastStop.stop_id : null;
+        
 
         const newStopId = await stopsController.createStop(
             route_id,
             address,
             special_instructions || null,
-            previous_stop_id
+            null
         );
 
         sendJson(res, 201, { stop_id: newStopId});
