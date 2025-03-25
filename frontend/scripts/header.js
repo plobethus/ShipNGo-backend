@@ -11,6 +11,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const loginBtn = document.getElementById("login-btn");
       const logoutBtn = document.getElementById("logout-btn");
       const protectedNav = document.getElementById("protected-nav");
+      const shipping = document.getElementById("shipping");
+      const store = document.getElementById("store");
+      const support = document.getElementById("support");
 
       if (role) {
         // Show protected nav items
@@ -26,14 +29,17 @@ document.addEventListener("DOMContentLoaded", () => {
         } else if (role === "employee") {
           dashboardLink.href = "/pages/employee.html";
           dashboardLink.textContent = "Employee Dashboard";
-        }
-      } else {
+          shipping.style.display = "none";
+          store.style.display="none";
+          support.style.display="none";
+      } 
+    }else {
         // Not logged in: hide protected nav, show login, hide logout
         protectedNav.style.display = "none";
         loginBtn.style.display = "inline-block";
         logoutBtn.style.display = "none";
+        dashboardLink.style.display = "none";
       }
-
       logoutBtn.addEventListener("click", () => {
         sessionStorage.clear();
         // Optionally, you might also call an endpoint to clear the token cookie
