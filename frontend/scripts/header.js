@@ -13,7 +13,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const protectedNav = document.getElementById("protected-nav");
       const shipping = document.getElementById("shipping");
       const store = document.getElementById("store");
-      const support = document.getElementById("support");
+
+      const faq = document.getElementById("faq");
+      const claim = document.getElementById("claim");
+      const billing = document.getElementById("billing");
+      const claimView = document.getElementById("claim-view");
+
+      const routes = document.getElementById("routes");
 
       if (role) {
         // Show protected nav items
@@ -26,12 +32,16 @@ document.addEventListener("DOMContentLoaded", () => {
         if (role === "customer") {
           dashboardLink.href = "/pages/customer.html";
           dashboardLink.textContent = "Customer Dashboard";
+          claimView.style.display="none";
+          routes.style.display="none";
         } else if (role === "employee") {
           dashboardLink.href = "/pages/employee.html";
           dashboardLink.textContent = "Employee Dashboard";
           shipping.style.display = "none";
           store.style.display="none";
-          support.style.display="none";
+          faq.style.display="none";
+          claim.style.display="none";
+          billing.style.display="none";
       } 
     }else {
         // Not logged in: hide protected nav, show login, hide logout
