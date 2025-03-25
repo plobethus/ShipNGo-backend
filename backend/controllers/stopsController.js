@@ -12,75 +12,78 @@ const db = require("mysql2").createPool({
 
 async function getStop(stop_id) {
     
-    const [rows] = db.execute("SELECT * FROM stops WHERE stop_id = ?", [stop_id])
+    const [rows] = await db.execute("SELECT * FROM stops WHERE stop_id = ?", [stop_id])
 
     return rows
 }
 
 async function getOrderedStopsByRouteId(route_id) {
-    const [rows] = await db.execute("SELECT * FROM stops WHERE route_id = ?", [route_id]);
-    if (rows.length === 0) return [];
+    const [rows] = await db.execute("SELECT * FROM stops WHERE route_id = ? ORDER BY stop_order", [route_id]);
 
-    const stopMap = {};
-    rows.forEach(stop => {
-        stopMap[stop.stop_id] = stop;
-    });
-
-    let current = rows.find(stop => stop.previous_stop_id === null);
-    if (!current) {
-        throw new Error("No starting stop found");
-    }
-
-    const orderedStops = [];
-    while (current) {
-        orderedStops.push(current);
-        current = current.next_stop_id ? stopMap[current.next_stop_id] : null;
-    }
-
-    return orderedStops;
+    return rows;
 }
 
 
 
 async function createStop(route_id, address, special_instructions, previous_stop_id) {
-    const [result] = await db.execute(
-        "INSERT INTO stops (route_id, address, special_instructions, previous_stop_id) VALUES (?, ?, ?, ?, ?)",
-        [route_id, address, special_instructions, previous_stop_id]
-    );
 
-    if (previous_stop_id != null){
-        await db.execute("REPLACE INTO stops (stop_id, next_stop_id) VALUES (?,?)", [previous_stop_id, result.insertId]);
+    let new_stop_order
+
+    if (previous_stop_id) {
+        const [prevStopRows] = await db.execute(
+            "SELECT stop_order FROM stops WHERE stop_id = ? AND route_id = ?",
+            [previous_stop_id, route_id]
+          );
+
+        if (!prevStopRows.length){
+            throw new Error("Invalid previous stop")
+        }
+
+        new_stop_order = prevStopRows[0].stop_order + 1
+
+        await db.execute(
+            "UPDATE stops SET stop_order = stop_order + 1 WHERE route_id = ? AND stop_order >= ?",
+            [route_id, new_stop_order]
+          );
+    } else {
+        const [rows] = await db.execute(
+            "SELECT stop_order FROM stops WHERE route_id = ? ORDER BY stop_order DESC LIMIT 1",
+            [route_id]
+          );
+        new_stop_order = rows.length ? rows[0].stop_order + 1 : 1;
     }
     
-    return result.insertId;
+    const [result] = await db.execute(
+        "INSERT INTO stops (route_id, address, special_instructions, stop_order) VALUES (?, ?, ?, ?)",
+        [route_id, address, special_instructions, new_stop_order]
+    );
+
+    const newStopId = result.insertId;
+
+
+    return newStopId;
 }
 
 async function deleteStop(stop_id) {
-    const [stops] = await db.execute("SELECT * FROM stops WHERE stop_id = ?", [stop_id]);
+    const [stops] = await db.execute(
+      "SELECT route_id, stop_order FROM stops WHERE stop_id = ?",
+      [stop_id]
+    );
     if (stops.length === 0) {
-        return 0;
+      return 0;
     }
-
-    const stop = stops[0];
-    const { previous_stop_id, next_stop_id } = stop;
-
-    if (previous_stop_id) {
-        await db.execute(
-            "UPDATE stops SET next_stop_id = ? WHERE stop_id = ?",
-            [next_stop_id, previous_stop_id]
-        );
-    }
-
-    if (next_stop_id) {
-        await db.execute(
-            "UPDATE stops SET previous_stop_id = ? WHERE stop_id = ?",
-            [previous_stop_id, next_stop_id]
-        );
-    }
-
+  
+    const { route_id, stop_order } = stops[0];
+  
     const [result] = await db.execute("DELETE FROM stops WHERE stop_id = ?", [stop_id]);
+  
+    await db.execute(
+      "UPDATE stops SET stop_order = stop_order - 1 WHERE route_id = ? AND stop_order > ?",
+      [route_id, stop_order]
+    );
+  
     return result.affectedRows;
-}
+  }
 
 module.exports = {
     getStop,

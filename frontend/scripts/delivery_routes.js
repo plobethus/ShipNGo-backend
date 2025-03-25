@@ -33,29 +33,3 @@ async function fetchActiveRoutes() {
     console.error(err);
   }
 }
-
-
-
-// async function fetchStops(route_id) {
-//   try {
-//     const res = await fetch(`${API_BASE}/routes/${route_id}/stops`, {
-//       headers: getAuthHeaders(),
-//     });
-//     const data = await res.json();
-
-//     const list = document.getElementById("stops-list");
-//     if (!res.ok) {
-//       list.innerHTML = `<li>${data.message}</li>`;
-//       return;
-//     }
-
-//     data.forEach(stop => {
-//       const li = document.createElement("li");
-//       li.textContent = stop.address + (stop.special_instructions ? ` (${stop.special_instructions})` : "");
-//       list.appendChild(li);
-//     });
-//   } catch (err) {
-//     console.error(err);
-//     document.getElementById("stops-list").innerHTML = "<li>Error loading stops.</li>";
-//   }
-// }
