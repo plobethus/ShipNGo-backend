@@ -1,14 +1,11 @@
 <!-- /ShipNGo/frontend/includes/header.html -->
 <nav>
-
-
+    <div class = title-and-dropdown>
+    <a href="/index.html"><h1 class="navbar" style="text-decoration:none;">ShipNGo</h1></a>
   <!-- Protected nav items, hidden by default -->
   <ul id="protected-nav" style="display: none;">
     <li>
-        <a href="/index.html"><h1 class="navbar">ShipNGo</h1></a>
-    </li>
-    <li>
-      <a href="#">Shipping</a>
+      <a href="#" id="shipping">Shipping</a>
       <ul class="dropdown">
         <li><a href="/pages/create-shipment.html">Create a Shipment</a></li>
         <li><a href="/pages/pickups.html">Schedule &amp; Manage Pickups</a></li>
@@ -16,13 +13,13 @@
       </ul>
     </li>
     <li>
-      <a href="#">Store</a>
+      <a href="#" id="store">Store</a>
       <ul class="dropdown">
         <li><a href="/pages/store.html">Packing &amp; Shipping Supplies</a></li>
       </ul>
     </li>
     <li>
-      <a href="#">Support</a>
+      <a href="#" id="support">Support</a>
       <ul class="dropdown">
         <li><a href="/pages/faq.html">FAQ</a></li>
         <li><a href="/pages/claims.html">File a Claim</a></li>
@@ -30,10 +27,11 @@
       </ul>
     </li>
   </ul>
+</div>
 
   <div class = "profile">
     <ul>
-        <a id="dashboard-link" href="#">Dashboard</a> 
+        <a id="dashboard-link" href="#" style="color:white; text-decoration:none;">Dashboard</a> 
     </ul>
     <div class="login">
         <a id="login-btn" href="/pages/login.html" class="btn">Log In</a>
