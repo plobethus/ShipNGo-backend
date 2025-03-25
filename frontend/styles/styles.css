@@ -231,6 +231,7 @@ footer {
   background-color: #004080;
   color: white;
   width: 30%;
+  height:70%; 
   margin: 82px auto;
   padding: 20px;
   border-radius: 10px;
@@ -284,6 +285,22 @@ footer {
 #classification {
   width: 165px;
 }
+
+.registration-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #004080;
+    color: white;
+    width: 60%;
+    height:70%; 
+    margin: 82px auto;
+    padding: 20px;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
 
 /* create-shipment styling */
 .shipment-container {
